@@ -1,0 +1,22 @@
+name: migrate-sandbox-db
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  migrate-sandbox-db:
+    environment: sandbox
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js & pnpm
+        uses: ./.github/actions/setup
+
+      - name: Apply DB migrations
+        run: CI=yes pnpm run drizzle:migrate:force
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

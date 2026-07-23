@@ -1,0 +1,22 @@
+name: migrate-prod-db
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  migrate-prod-db:
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js & pnpm
+        uses: ./.github/actions/setup
+
+      - name: Apply DB migrations
+        run: CI=yes pnpm run drizzle:migrate:force
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

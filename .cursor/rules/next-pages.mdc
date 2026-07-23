@@ -1,0 +1,51 @@
+---
+description: Thin Next.js page and layout conventions
+globs: app/**/{page,layout}.tsx
+alwaysApply: false
+---
+
+# Pages and layouts
+
+- `page.tsx` / `layout.tsx` = minimal scaffolding only
+- Logic, queries, and UI live in `modules/*/components/`
+- Module page component is always named `Page` (path already scopes the domain: `modules/items/components/Page.tsx`)
+- The App Router file only wires it (thin default export)
+
+## Auth
+
+Protected routes wrap with `<Authenticated />` or `<AuthenticatedPage />` inside the module `Page` when possible:
+
+```tsx
+// modules/items/components/Page.tsx
+export function Page() {
+  return (
+    <AuthenticatedPage>
+      <ItemsDashboard />
+    </AuthenticatedPage>
+  );
+}
+
+// app/dashboard/items/page.tsx
+import { Page } from '@/modules/items/components/Page';
+
+export default function ItemsDashboardPage() {
+  return <Page />;
+}
+```
+
+## Query handling belongs in module components
+
+```tsx
+// modules/items/components/ItemsDashboard.tsx
+export function ItemsDashboard() {
+  const itemsQuery = useSessionQuery(service_items.queries.list());
+
+  if (itemsQuery.data) return (/* render */);
+  if (itemsQuery.isError) return (/* error */);
+  return (/* skeleton */);
+}
+```
+
+## JSX conditionals
+
+- Optional UI: `condition && <Node />` — not `condition ? <Node /> : null`

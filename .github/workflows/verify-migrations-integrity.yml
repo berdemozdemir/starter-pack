@@ -1,0 +1,75 @@
+name: Verify Migrations Integrity
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+jobs:
+  verify-migrations-integrity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js & pnpm
+        uses: ./.github/actions/setup
+
+      - name: Check for duplicate migrations
+        run: |
+          cd database/migrations
+
+          # Journal tags must be unique (Drizzle's source of truth)
+          duplicate_tags=$(
+            jq -r '.entries[].tag' meta/_journal.json | sort | uniq -d
+          )
+          if [ -n "$duplicate_tags" ]; then
+            echo "::error::Duplicate migration tags in journal:"
+            echo "$duplicate_tags"
+            exit 1
+          fi
+
+          # Every journal entry must have a matching .sql file
+          while IFS= read -r tag; do
+            if [ ! -f "${tag}.sql" ]; then
+              echo "::error::Missing migration file for journal tag: $tag"
+              exit 1
+            fi
+          done < <(jq -r '.entries[].tag' meta/_journal.json)
+
+          # No .sql file should exist outside the journal
+          for file in *.sql; do
+            [ -f "$file" ] || continue
+            tag="${file%.sql}"
+            if ! jq -e --arg tag "$tag" '.entries[] | select(.tag == $tag)' meta/_journal.json > /dev/null; then
+              echo "::error::Migration file not in journal: $file"
+              exit 1
+            fi
+          done
+
+          echo "✅ Migration journal and files are consistent"
+
+      - name: Check for missing migrations
+        run: |
+          mkdir -p temp/original
+          cp -r database/migrations temp/original
+
+          pnpm drizzle-kit generate > /dev/null
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+
+      - name: Diff migrations after generate
+        run: |
+          if ! diff -r database/migrations temp/original/migrations > /dev/null; then
+            echo "❌ Error: You have migrations pending generation"
+            exit 1
+          fi
+
+          echo "✅ No missing migrations detected"

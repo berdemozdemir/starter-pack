@@ -1,0 +1,101 @@
+---
+description: Core TypeScript, React, Drizzle, and UI conventions
+alwaysApply: true
+---
+
+# Core conventions
+
+## Code style
+
+- No `console.log` debug dumps or commented-out code
+- Avoid eslint-disable comments; only when no reasonable alternative exists (document why)
+- No default exports — use named exports
+  - **Exception:** Next.js `app/**/page.tsx`, `app/**/layout.tsx`, and config files (`next.config.ts`, `drizzle.config.ts`, etc.) require default exports
+- No long ternaries; don't name your own functions `handle*` — name by what the function does
+  - **Exception:** library APIs like `form.handleSubmit` (react-hook-form) or DOM/React event props
+- File naming: hooks → camelCase, components → PascalCase, other → kebab-case
+- One param per function, or an object param
+- Prefer `args.field` over destructuring `args` in long functions (short functions excepted)
+- Prefer colocated code; no barrel `index.ts` re-exports
+- No verbose JSDoc (@param, @returns, etc.)
+- No explicit return types on functions
+- No px values in custom CSS — use rem (Tailwind arbitrary values like `shadow-[0_8px_24px]` and canvas drawing are fine)
+- No inline style overrides on UI kit components — use variants/components
+- Booleans: prefix with `is`, `has`, `should`, `does`
+- JSX conditionals: use `condition && <Node />` for optional / branch UI — never `condition ? <Node /> : null`
+  ```tsx
+  // Preferred
+  {item.notes && <p>{item.notes}</p>}
+  {!hasItems && <EmptyState />}
+  {hasItems && <ItemList items={items} />}
+
+  // Avoid
+  {item.notes ? <p>{item.notes}</p> : null}
+  {hasItems ? <ItemList items={items} /> : <EmptyState />}
+  ```
+- Omit curly braces when the body is a single statement — e.g. early `return`, single-line `if`, single-expression arrow functions:
+  ```typescript
+  // Preferred
+  if (loadErr) return err(loadErr);
+  if (!data) return null;
+  const double = (n: number) => n * 2;
+
+  // Avoid
+  if (loadErr) {
+    return err(loadErr);
+  }
+  ```
+  Use braces when the block has multiple statements or when nesting `if`/`else` branches.
+
+## Types
+
+- Prefer value-optional (`field: T | undefined`) over key-optional (`field?: T`)
+- Convert `null` → `undefined` on server before sending to clients
+- Exception: UI props like `className?: string` may use key-optional
+
+## Result pattern
+
+- Use `tryCatch` / `tryCatchDb` + `ok` / `err` from `@/lib/result`
+- Always destructure: `const [error, data] = ...` — never index (`result[0]`)
+
+## Database (Drizzle)
+
+- All `pgTable` declarations use `...timestamps` from `@/lib/db/timestamps`
+- Naming: `table_*`, `query_*`, `view_*`, `pgEnum_*`
+- SQL table names: existing tables use plural (`events`, `users`); keep consistency within the project
+- Zod schemas: `*Schema` suffix
+- No single-letter SQL aliases
+
+### RLS (Row Level Security)
+
+This project uses **two separate layers**:
+
+1. **App tables** (`events`, `users`, etc.) — accessed only via oRPC + Drizzle with `DATABASE_URL` on the server. Auth/authorization lives in `procedure_protected` handlers, not Postgres RLS. Table RLS is **not required** today.
+2. **Supabase Storage** — clients upload directly, so RLS policies on `storage.objects` are defined in `integrations/supabase/policies/*.sql`.
+
+`.enableRLS()` in Drizzle only runs `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` — it **turns on** the RLS switch for a table. It does **not** create policies. Policies (`CREATE POLICY ...`) are separate SQL that define who can read/write rows.
+
+```
+enableRLS()  →  "RLS is active on this table"
+CREATE POLICY → "authenticated users can SELECT their own rows"
+```
+
+Both are needed for RLS to actually work. Without `enableRLS()`, policies have no effect. Without policies, RLS-enabled tables deny everyone (except superuser/service_role).
+
+Do **not** add `.enableRLS()` to app tables unless you also add matching policies and plan to query via Supabase client roles (`anon`/`authenticated`). Our server uses `DATABASE_URL` which typically bypasses RLS anyway.
+
+## UI language
+
+- All user-facing strings in **English** (buttons, errors, toasts, dialogs)
+- Server `message` fields: user-friendly English
+- No i18n libraries unless explicitly requested
+
+## TanStack Query in components
+
+- Check `.data` first, then errors, then loading — not `isSuccess`
+- Use `usePublicQuery` / `useSessionQuery` — not raw `useQuery`
+
+## Skip commenting on
+
+- Auto-generated migrations
+- `'use client'`, `'use server'`, `server-only`, `client-only` directives

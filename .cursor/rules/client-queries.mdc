@@ -1,0 +1,30 @@
+---
+description: TanStack Query service_* layer conventions
+globs: modules/**/client-queries.ts
+alwaysApply: false
+---
+
+# Client queries
+
+- Export a single `service_<domain>` object with `queries` and `mutations` keys
+  - Existing code may use `<domain>_dashboard` / `<domain>_public` — prefer `service_<domain>` for new modules
+- End with `as const`
+- Use `queryOptions()` / `mutationOptions()` from `@tanstack/react-query`
+- Unwrap Results via `.then(okOrThrow)` from `@/lib/result`
+- Mutation args: `ArgsOf<typeof orpc.x.y.call>`
+- Query keys from orpc where possible
+- Simple method names: `get`, `create`, `update`, `delete`, `list`
+- Mutations: prefer `meta.invalidates` for cache invalidation; `onSuccess` + `queryClient.invalidateQueries` is also used in existing code
+- Prefer inline query keys in `queryOptions`; extract a shared key factory only when the same key is reused across helpers
+
+## In components
+
+- Queries: `usePublicQuery` or `useSessionQuery` from `@/integrations/tanstack-query/query`
+- Mutations: `useMutation(service_foo.mutations.create())`
+- No raw `useQuery` from `@tanstack/react-query` in components
+- No standalone key factories unless shared invalidation helpers need them
+- Reusable hooks exported separately if needed:
+
+```typescript
+export const useGetItemsQuery = () => useSessionQuery(service_items.queries.list());
+```

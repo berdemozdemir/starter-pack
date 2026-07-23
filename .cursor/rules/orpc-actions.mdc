@@ -1,0 +1,33 @@
+---
+description: oRPC handler conventions for actions/
+globs: modules/**/actions/**/*
+alwaysApply: false
+---
+
+# oRPC actions
+
+- No `"use server"` — we use oRPC, not Next.js server actions
+- Export `orpc_doSomething` from kebab-case files without `orpc_` prefix (e.g. `grant-admin-role.ts`)
+- Handler logic **inline** in `.handler()` — never extract to a separate function
+- Use `tryCatch` / `tryCatchDb` + `ok` / `err` from `@/lib/result` — never throw (except DB transactions)
+- Error responses: `{ reason, message }` where `message` is user-friendly English
+
+```typescript
+const orpc_handleSomething = procedure_protected
+  .input(someSchema)
+  .handler(async ({ context, input }) => {
+    const [err, data] = await tryCatchDb(() => { /* db logic */ });
+    if (err) return err({ reason: 'database-error', message: 'Something went wrong' });
+    return ok({ data });
+  });
+```
+
+## Server-side calls
+
+- Chain `.callable()` to invoke from pages or other actions directly
+- Do NOT use the HTTP orpc client for in-process server calls
+- The handler IS the function — no separate plain function wrapper
+
+## Auth
+
+- `procedure_public` vs `procedure_protected` — pick the correct one
