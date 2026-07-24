@@ -81,6 +81,8 @@ pnpm supabase:setup-storage   # optional — no buckets ship by default
 pnpm dev
 ```
 
+`pnpm supabase:start` requires `supabase/templates/recovery.html` because `supabase/config.toml` points at a custom password-reset email. That file ships with this starter — do not delete it unless you also remove the `[auth.email.template.recovery]` block from `config.toml`.
+
 Storage is **optional**. This starter does not create buckets. When you need uploads, add bucket names, RLS under `integrations/supabase/policies/`, and extend `scripts/supabase/setup-local-storage.ts`.
 
 | Service          | URL                    |
@@ -100,6 +102,7 @@ Storage is **optional**. This starter does not create buckets. When you need upl
 | 3   | App URL                    | `.env.local` → `NEXT_PUBLIC_APP_URL`                         |
 | 4   | Supabase project           | `.env.local` URL + keys                                      |
 | 5   | Brand / colors / fonts     | `app/globals.css`, `app/layout.tsx`                          |
+| 5b  | Auth email template        | `supabase/config.toml` recovery `subject` + `supabase/templates/recovery.html` branding |
 | 6   | Routes                     | `lib/paths.ts`                                               |
 | 7   | Storage buckets (optional) | setup script + `integrations/supabase/policies/` when needed |
 | 8   | CI environments            | `.github/workflows/*` + GitHub Environments                  |
@@ -158,6 +161,7 @@ You are working in this Next.js **starter pack** folder (not a finished product)
 - Module UI lives under `modules/*/components/`; App Router files only wire those components
 - `package.json` name = `project_slug`
 - Site constants + root layout metadata = `site_name` / `site_description`
+- Update Supabase recovery email branding: `supabase/config.toml` `[auth.email.template.recovery].subject` and copy in `supabase/templates/recovery.html` (keep the file — `supabase start` needs it)
 - Trim `lib/paths.ts` to auth + dashboard + home unless I ask for more
 - Align user-facing strings with `default_locale` (starter default is English)
 - Do not invent secrets; leave `.env.example` placeholders

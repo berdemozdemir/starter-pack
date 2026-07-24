@@ -202,7 +202,7 @@ otp_expiry = 3600
 
 # Custom recovery (password reset) email — local Inbucket preview
 [auth.email.template.recovery]
-subject = "Şifrenizi sıfırlayın | Dijital Davetiyem"
+subject = "Reset your password"
 content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize notification email template
