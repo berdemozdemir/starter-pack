@@ -61,6 +61,7 @@ modules/<domain>/       # Feature slice
   db-tables.ts          # Drizzle tables (when needed)
 integrations/           # orpc, drizzle, supabase, tanstack-query
 lib/                    # result, paths, utils
+proxy.ts                # Next.js request edge (session refresh + auth redirects)
 database/migrations/    # Drizzle-generated SQL
 scripts/                # migrate + local storage setup
 .cursor/rules/          # Coding conventions for agents
@@ -229,3 +230,4 @@ Details: **AGENTS.md** and **`.cursor/rules/`**.
 - Never commit `.env.local` or production secrets
 - Keep `modules/example` so newcomers learn by reading it
 - Ship README + AGENTS.md + `.cursor/rules` together
+# guneyagizvedis
