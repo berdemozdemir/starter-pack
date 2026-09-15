@@ -102,7 +102,7 @@ export default function DashboardPage() {
 - Soft delete: `notDeleted(table)` / `softDeleteNow()` from `@/lib/db/not-deleted`. Reads/updates always filter `notDeleted`; content deletes are `update().set(softDeleteNow())` — never `.delete()` except composite-PK junction tables
 - Unique slugs: partial unique index `WHERE deleted_at IS NULL` — do not use `.unique()` on the slug column
 - Schema changes: edit `db-tables.ts` → register in `integrations/drizzle/drizzle-schema.ts` → `pnpm drizzle:generate` → append `trg_set_updated_at` if the table uses `...timestamps` → commit SQL → `pnpm drizzle:migrate`
-- App tables: auth via oRPC (no Postgres RLS required when querying with `DATABASE_URL`)
+- App tables: every `pgTable` uses `.enableRLS()` (lockdown for PostgREST/`anon`); auth stays in oRPC. Do **not** add table `CREATE POLICY` unless querying via Supabase client roles. `DATABASE_URL` bypasses RLS so the app is unaffected
 - Supabase Storage is **optional**: add RLS under `integrations/supabase/policies/` only when you introduce buckets
 
 ### UI language
@@ -150,7 +150,7 @@ CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`.
 3. Add `service_*` queries/mutations in `client-queries.ts`
 4. Build UI in `components/`, keep `app/**/page.tsx` thin
 5. Add Zod schemas with `*Schema` suffix in `schemas/`
-6. If DB changes: update `db-tables.ts`, register in `drizzle-schema.ts`, generate + migrate
+6. If DB changes: update `db-tables.ts` (every `pgTable` ends with `.enableRLS()`), register in `drizzle-schema.ts`, generate + migrate
 7. User-facing strings in English (or your product language after bootstrap)
 8. Run `pnpm typecheck` and `pnpm lint`
 
@@ -174,3 +174,4 @@ Add your product domains to this table as you build them.
 - No `handle*` on your own functions (library APIs like `form.handleSubmit` are fine)
 - No `condition ? <Node /> : null` — use `condition && <Node />`
 - No `.delete()` on content tables — use `softDeleteNow()`
+- No app-table `CREATE POLICY` unless you query via Supabase `anon`/`authenticated`

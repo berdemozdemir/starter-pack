@@ -18,4 +18,4 @@ export const table_items = pgTable('items', {
   notes: text('notes'),
 
   ...timestamps,
-});
+}).enableRLS();

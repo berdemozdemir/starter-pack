@@ -8,4 +8,4 @@ export const table_users = pgTable('users', {
   name: text('name').notNull(),
 
   ...timestamps,
-});
+}).enableRLS();

@@ -1,0 +1,2 @@
+ALTER TABLE "users" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "items" ENABLE ROW LEVEL SECURITY;

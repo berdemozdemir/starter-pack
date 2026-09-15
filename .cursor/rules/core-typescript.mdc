@@ -91,19 +91,19 @@ alwaysApply: true
 
 This project uses **two separate layers**:
 
-1. **App tables** (`users`, `items`, etc.) — accessed only via oRPC + Drizzle with `DATABASE_URL` on the server. Auth/authorization lives in `procedure_protected` handlers, not Postgres RLS. Table RLS is **not required** today.
+1. **App tables** (`users`, `items`, etc.) — every `pgTable` ends with `.enableRLS()`. Auth/authorization lives in oRPC `procedure_*` handlers, not Postgres policies. App queries go through Drizzle + `DATABASE_URL` (typically `postgres`), which **bypasses** RLS, so the app keeps working.
 2. **Supabase Storage** — clients upload directly, so RLS policies on `storage.objects` are defined in `integrations/supabase/policies/*.sql`.
 
-`.enableRLS()` in Drizzle only runs `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` — it **turns on** the RLS switch for a table. It does **not** create policies. Policies (`CREATE POLICY ...`) are separate SQL that define who can read/write rows.
+`.enableRLS()` only runs `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`. It does **not** create policies.
 
 ```
-enableRLS()  →  "RLS is active on this table"
-CREATE POLICY → "authenticated users can SELECT their own rows"
+enableRLS()  →  RLS switch on
+CREATE POLICY → who (anon/authenticated) may read/write which rows
 ```
 
-Both are needed for RLS to actually work. Without `enableRLS()`, policies have no effect. Without policies, RLS-enabled tables deny everyone (except superuser/service_role).
+**App-table convention (lockdown):** enable RLS on every table, **do not** add table `CREATE POLICY` unless you intentionally query those tables via Supabase client roles (`anon` / `authenticated`). RLS on + no policies = PostgREST/`anon` sees zero rows (desired). Do not enable RLS only in the Supabase dashboard — always via Drizzle schema + migration.
 
-Do **not** add `.enableRLS()` to app tables unless you also add matching policies and plan to query via Supabase client roles (`anon`/`authenticated`). Our server uses `DATABASE_URL` which typically bypasses RLS anyway.
+**Storage:** keep writing policies under `integrations/supabase/policies/` when adding buckets.
 
 ## UI language
 
