@@ -15,6 +15,9 @@ jobs:
       - name: Setup node.js & pnpm
         uses: ./.github/actions/setup
 
+      - name: Compile Lingui catalogs
+        run: pnpm i18n:compile
+
       - name: Typecheck
         run: pnpm typecheck
 

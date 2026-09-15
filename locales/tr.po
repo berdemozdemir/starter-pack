@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-09-15 20:36+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: tr\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: lib/i18n/components/LanguageSwitcher.tsx:48
+msgid "Change language"
+msgstr "Dili değiştir"
+
+#: modules/landing/components/Page.tsx:46
+msgid "Dashboard"
+msgstr "Kontrol paneli"
+
+#: modules/example/components/ExampleDashboard.tsx:96
+msgid "Delete"
+msgstr "Sil"
+
+#: modules/landing/components/Page.tsx:40
+msgid "Sign up"
+msgstr "Kayıt ol"
+
+#: modules/landing/components/Page.tsx:17
+msgid "Next.js starter"
+msgstr "Next.js başlangıç paketi"
+
+#: modules/example/components/ExampleDashboard.tsx:31
+msgid "Item deleted"
+msgstr "Öğe silindi"
+
+#: modules/example/components/ExampleDashboard.tsx:116
+msgid "Could not load items. Make sure you are signed in and migrations have been applied."
+msgstr "Öğeler yüklenemedi. Oturum açtığınızdan ve migrasyonların uygulandığından emin olun."
+
+#: modules/example/components/ExampleDashboard.tsx:48
+msgid "My items"
+msgstr "Öğelerim"
+
+#: app/[language]/(public)/page.tsx:10
+msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
+msgstr "Auth, oRPC, Drizzle, Supabase ve TanStack Query kuralları — silinebilir bir modules/example CRUD demosu."
+
+#: modules/landing/components/Page.tsx:21
+msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
+msgstr "Auth, oRPC, Drizzle, Supabase ve TanStack Query kuralları — silinebilir bir <0>modules/example</0> CRUD demosu."
+
+#: modules/example/components/ExampleDashboard.tsx:62
+msgid "View all items (admin)"
+msgstr "Tüm öğeleri görüntüle (yönetici)"
+
+#: modules/example/components/ExampleDashboard.tsx:45
+msgid "Starter pack · example module"
+msgstr "Başlangıç paketi · örnek modül"
+
+#: modules/landing/components/Page.tsx:34
+msgid "Log in"
+msgstr "Giriş yap"
+
+#: modules/example/components/ExampleDashboard.tsx:51
+msgid "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."
+msgstr "Bu sayfa <0>modules/example</0> desenini gösterir: korumalı oRPC, TanStack Query, sahip kapsamlı CRUD."

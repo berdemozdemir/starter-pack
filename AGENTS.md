@@ -3,7 +3,7 @@
 This repository is a **starter pack**, not a finished product.
 Use it as the foundation for a new Next.js app with the conventions below.
 
-**Stack:** Next.js 16 · Supabase · Drizzle ORM · oRPC · TanStack Query · Tailwind/shadcn · Zod
+**Stack:** Next.js 16 · Supabase · Drizzle ORM · oRPC · TanStack Query · Lingui · Tailwind/shadcn · Zod
 
 Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summarized here.
 
@@ -17,12 +17,15 @@ Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summ
 - oRPC API layer (`/api/rpc`) with `procedure_public` / `procedure_protected` / `procedure_admin`
 - Drizzle + Postgres (local Supabase) + migration scripts
 - TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery`
+- Lingui i18n on every page (`app/[language]/`, catalogs in `locales/`)
 - Demo domain: `modules/example` (owner-scoped items CRUD) — delete after your first real domain
 
 ## Project layout
 
 ```
 app/                    # Next.js routes (thin pages only)
+app/[language]/         # Locale-prefixed app (`/en/...`, `/tr/...`)
+app/api/                # Unprefixed API
 modules/<domain>/       # Feature modules
   actions/              # oRPC handlers (orpc_* exports)
   client-queries.ts     # service_* TanStack Query layer
@@ -31,7 +34,8 @@ modules/<domain>/       # Feature modules
   db-tables.ts          # Drizzle pgTable definitions
 integrations/           # orpc, supabase, drizzle, tanstack-query wiring
 lib/                    # Shared utilities (result, paths, db helpers)
-proxy.ts                # Request edge: Supabase session refresh + auth redirects
+proxy.ts                # Request edge: session refresh + auth redirects + locale prefix
+locales/                # Lingui catalogs (`en.po`, `tr.po`; compiled `.js` is gitignored)
 database/migrations/    # Drizzle SQL migrations (auto-generated)
 ```
 
@@ -60,11 +64,11 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - `app/**/page.tsx` = minimal wiring only
 - Logic and UI live in `modules/*/components/` (e.g. `Page`, `ExampleDashboard`)
 - Module page component is always named `Page` — the module path already scopes it
-- Protected UI: gate in the route **layout** — `requireAuth()` on `app/dashboard/layout.tsx`, `requireAdmin()` on `app/admin/layout.tsx`. `proxy.ts` is the first redirect; oRPC `procedure_*` is the API gate. `PageLayout` is chrome, not auth.
+- Protected UI: gate in the route **layout** — `requireAuth()` on `app/[language]/dashboard/layout.tsx`, `requireAdmin()` on `app/[language]/admin/layout.tsx`. `proxy.ts` is the first redirect; oRPC `procedure_*` is the API gate. `PageLayout` is chrome, not auth.
 
 ```tsx
-// app/dashboard/layout.tsx — requireAuth()
-// app/admin/layout.tsx — requireAdmin()
+// app/[language]/dashboard/layout.tsx — requireAuth()
+// app/[language]/admin/layout.tsx — requireAdmin()
 // app/**/page.tsx — thin; module Page = content + PageLayout
 ```
 
@@ -102,10 +106,14 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - App tables: every `pgTable` uses `.enableRLS()` (lockdown for PostgREST/`anon`); auth stays in oRPC. Do **not** add table `CREATE POLICY` unless querying via Supabase client roles. `DATABASE_URL` bypasses RLS so the app is unaffected
 - Supabase Storage is **optional**: add RLS under `integrations/supabase/policies/` only when you introduce buckets
 
-### UI language
+### UI language / i18n
 
-- Default starter copy is **English** (UI, Zod messages, server `message` fields, docs)
-- No i18n libraries unless explicitly requested
+- **Whole app:** Lingui macros (`Trans`, `t`, `msg`). `LinguiClientProvider` is inside `components/providers` (root layout passes locale + messages)
+- English source strings in code; Turkish in `locales/tr.po`. Default URL locale `en`
+- Every page lives under `app/[language]/` (`/en/dashboard`, `/tr/auth/login`). Only `app/api` (and static files) stay unprefixed
+- Links and redirects use unprefixed `paths.*` (`/auth/login`, `/dashboard`). `proxy.ts` adds the locale prefix
+- After changing copy: `pnpm i18n:extract` → fill `locales/tr.po` → `pnpm i18n:compile`
+- Language switcher: `@/lib/i18n/components/LanguageSwitcher` in `app/[language]/layout.tsx`
 
 ## Commands
 
@@ -120,6 +128,8 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 | `pnpm db:reset-local`                     | Full local reset: supabase reset + migrate + storage     |
 | `pnpm supabase:start` / `stop` / `status` | Local Supabase                                           |
 | `pnpm supabase:setup-storage`             | Optional local storage bootstrap (no buckets by default) |
+| `pnpm i18n:extract`                       | Extract public strings into `locales/*.po`               |
+| `pnpm i18n:compile`                       | Compile catalogs to `locales/*.js` (gitignored)          |
 
 ## Environments (customize per product)
 
@@ -138,7 +148,7 @@ feature/* → PR → develop  → sandbox migration + deploy
 develop   → PR → main      → prod migration + deploy
 ```
 
-CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`.
+CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`, `i18n` (catalogs up to date).
 
 ## New feature checklist
 
@@ -148,7 +158,7 @@ CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`.
 4. Build UI in `components/`, keep `app/**/page.tsx` thin
 5. Add Zod schemas with `*Schema` suffix in `schemas/`
 6. If DB changes: update `db-tables.ts` (every `pgTable` ends with `.enableRLS()`), register in `drizzle-schema.ts`, generate + migrate
-7. User-facing strings in English (or your product language after bootstrap)
+7. Public strings: English source + Lingui macros; then `pnpm i18n:extract` and fill `locales/tr.po`
 8. Run `pnpm typecheck` and `pnpm lint`
 
 ## Domains in this starter
@@ -156,6 +166,7 @@ CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`.
 | Module    | Purpose                                                                           |
 | --------- | --------------------------------------------------------------------------------- |
 | `auth`    | Login, signup, password reset, session, roles (`member` / `admin`)                |
+| `landing` | Public home under `app/[language]/(public)/` |
 | `example` | Teachable owner-scoped CRUD + admin list-all — **delete after first real domain** |
 
 Add your product domains to this table as you build them.
@@ -166,7 +177,7 @@ Add your product domains to this table as you build them.
 - No default exports (except Next.js pages/layouts and config files)
 - No `console.log` debug dumps
 - No barrel `index.ts` re-exports
-- No i18n framework unless explicitly requested
+- No new i18n library — use Lingui as wired (`lib/i18n`, `locales/*.po`)
 - No destructuring `args` in long functions — use `args.field` directly
 - No `handle*` on your own functions (library APIs like `form.handleSubmit` are fine)
 - No `condition ? <Node /> : null` — use `condition && <Node />`

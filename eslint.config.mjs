@@ -83,5 +83,6 @@ export default defineConfig([
     '**/*.tsbuildinfo',
     'next-env.d.ts',
     '**/playwright-report/**',
+    'locales/*.js',
   ]),
 ]);

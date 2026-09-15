@@ -11,31 +11,38 @@ alwaysApply: false
 - Module page component is always named `Page` (path already scopes the domain: `modules/example/components/Page.tsx`)
 - The App Router file only wires it (thin default export)
 
+## Locale-prefixed routes
+
+- Every page lives under `app/[language]/` (`/en/dashboard`, `/tr/auth/login`)
+- Only `app/api` (and files with a dot, e.g. favicon) stay unprefixed
+- Links: unprefixed `paths.*` (`href={paths.dashboard.base}`). Middleware prefixes the locale
+- `app/**/page.tsx` still only wires a module `Page`
+
 ## Auth
 
 Gate the shell once in the route layout:
 
-- `app/dashboard/layout.tsx` → `requireAuth()` (any signed-in user)
-- `app/admin/layout.tsx` → `requireAdmin()`
+- `app/[language]/dashboard/layout.tsx` → `requireAuth()` (any signed-in user)
+- `app/[language]/admin/layout.tsx` → `requireAdmin()`
 - `proxy.ts` redirects unauthenticated and wrong-role traffic
 - APIs use `procedure_protected` / `procedure_admin`
 
 Use `PageLayout` in the module component for width/padding; it is layout chrome, not an auth gate.
 
 ```tsx
-// app/dashboard/layout.tsx
+// app/[language]/dashboard/layout.tsx
 export default async function DashboardLayout(props: PropsWithChildren) {
   await requireAuth();
   return props.children;
 }
 
-// app/admin/layout.tsx
+// app/[language]/admin/layout.tsx
 export default async function AdminLayout(props: PropsWithChildren) {
   await requireAdmin();
   return props.children;
 }
 
-// app/dashboard/page.tsx
+// app/[language]/dashboard/page.tsx
 import { Page } from '@/modules/example/components/Page';
 
 export default function DashboardPage() {

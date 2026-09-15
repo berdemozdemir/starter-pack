@@ -4,7 +4,7 @@
 > It ships auth, oRPC, Drizzle, Supabase, TanStack Query, and domain-module conventions.
 > `modules/example` is a teachable CRUD demo — delete it after your first real domain.
 
-**Stack:** Next.js 16 · React 19 · Supabase (Auth + Storage) · Drizzle ORM · oRPC · TanStack Query · Zod · Tailwind 4 · shadcn/ui
+**Stack:** Next.js 16 · React 19 · Supabase (Auth + Storage) · Drizzle ORM · oRPC · TanStack Query · Lingui · Zod · Tailwind 4 · shadcn/ui
 
 ---
 
@@ -24,7 +24,7 @@ Flow:
 2. Keep **AGENTS.md** open (or let the agent load it) while building features
 3. Don’t merge them into one file — humans skim README; agents follow AGENTS
 
-Language for this shareable starter: **English** (docs, comments, and default UI copy). Change UI language when you bootstrap a product if needed.
+Language for this shareable starter: **English** source strings (docs, Lingui message IDs). Every page is locale-prefixed (`/en/...`, `/tr/...`) with a language switcher in the `[language]` layout.
 
 ---
 
@@ -39,7 +39,7 @@ Demo UI lives in `modules/example/components/Page.tsx`.
 Wire it from a thin App Router file only when you want a URL, e.g.:
 
 ```tsx
-// app/dashboard/page.tsx
+// app/[language]/dashboard/page.tsx
 import { Page } from '@/modules/example/components/Page';
 
 export default function DashboardPage() {
@@ -53,6 +53,8 @@ export default function DashboardPage() {
 
 ```text
 app/                    # Thin routes only
+app/[language]/         # Locale-prefixed app pages
+app/api/                # Unprefixed API
 modules/<domain>/       # Feature slice
   actions/              # orpc_* handlers
   client-queries.ts     # service_* TanStack Query layer
@@ -61,7 +63,8 @@ modules/<domain>/       # Feature slice
   db-tables.ts          # Drizzle tables (when needed)
 integrations/           # orpc, drizzle, supabase, tanstack-query
 lib/                    # result, paths, utils
-proxy.ts                # Next.js request edge (session refresh + auth redirects)
+proxy.ts                # Next.js request edge (session, auth, locale prefix)
+locales/                # Lingui catalogs (commit `.po`; compiled `.js` is gitignored)
 database/migrations/    # Drizzle-generated SQL
 scripts/                # migrate + local storage setup
 .cursor/rules/          # Coding conventions for agents
@@ -98,7 +101,9 @@ Signup creates a `member`. To try `/admin` (gated by `requireAdmin()` + `procedu
 UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
 ```
 
-Then sign in again. Members hitting `/admin` are sent back to `/dashboard`.
+Then sign in again. Members hitting `/en/admin` are sent back to `/en/dashboard`.
+
+Guests hitting `/` are redirected to `/en` (or `/tr` if the `locale` cookie / `Accept-Language` prefers Turkish). Login is `/en/auth/login`. The language switcher lives in `app/[language]/layout.tsx` so it appears on every page.
 
 ---
 
@@ -117,6 +122,7 @@ Then sign in again. Members hitting `/admin` are sent back to `/dashboard`.
 | 8   | CI environments            | `.github/workflows/*` + GitHub Environments                                             |
 | 9   | Example module             | Delete or morph into your first domain                                                  |
 | 10  | Docs                       | Keep README for humans; update AGENTS domain table                                      |
+| 11  | Default locale             | `lib/i18n/config.ts` → `DEFAULT_LOCALE_CODE` (`en` in this starter)                     |
 
 ### Minimum Drizzle aggregator (starter)
 
@@ -172,7 +178,7 @@ You are working in this Next.js **starter pack** folder (not a finished product)
 - Site constants + root layout metadata = `site_name` / `site_description`
 - Update Supabase recovery email branding: `supabase/config.toml` `[auth.email.template.recovery].subject` and copy in `supabase/templates/recovery.html` (keep the file — `supabase start` needs it)
 - Trim `lib/paths.ts` to auth + dashboard + home unless I ask for more
-- Align user-facing strings with `default_locale` (starter default is English)
+- Align user-facing strings with `default_locale` (starter default is English). Public copy stays English in source and `locales/tr.po` for Turkish; set `DEFAULT_LOCALE_CODE` in `lib/i18n/config.ts`
 - Do not invent secrets; leave `.env.example` placeholders
 - Do not create a git commit unless I ask
 - End with checklist: `pnpm install` → env → supabase → migrate → `pnpm dev`
@@ -210,7 +216,8 @@ github_prod_branch: main
 4. Add `service_<domain>` in `client-queries.ts`
 5. Keep `app/**/page.tsx` thin; put UI in module components
 6. Schema change → `pnpm drizzle:generate` → commit → `pnpm drizzle:migrate`
-7. `pnpm typecheck && pnpm lint`
+7. Public copy change → `pnpm i18n:extract` → fill `locales/tr.po` → `pnpm i18n:compile`
+8. `pnpm typecheck && pnpm lint`
 
 Details: **AGENTS.md** and **`.cursor/rules/`**.
 
@@ -229,6 +236,8 @@ Details: **AGENTS.md** and **`.cursor/rules/`**.
 | `pnpm drizzle:migrate:force` | CI / local reset            |
 | `pnpm db:reset-local`        | Reset local DB + storage    |
 | `pnpm supabase:start`        | Local Supabase              |
+| `pnpm i18n:extract`          | Extract public strings      |
+| `pnpm i18n:compile`          | Compile Lingui catalogs     |
 
 ---
 

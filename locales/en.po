@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-09-15 20:36+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: lib/i18n/components/LanguageSwitcher.tsx:48
+msgid "Change language"
+msgstr "Change language"
+
+#: modules/landing/components/Page.tsx:46
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: modules/example/components/ExampleDashboard.tsx:96
+msgid "Delete"
+msgstr "Delete"
+
+#: modules/landing/components/Page.tsx:40
+msgid "Sign up"
+msgstr "Sign up"
+
+#: modules/landing/components/Page.tsx:17
+msgid "Next.js starter"
+msgstr "Next.js starter"
+
+#: modules/example/components/ExampleDashboard.tsx:31
+msgid "Item deleted"
+msgstr "Item deleted"
+
+#: modules/example/components/ExampleDashboard.tsx:116
+msgid "Could not load items. Make sure you are signed in and migrations have been applied."
+msgstr "Could not load items. Make sure you are signed in and migrations have been applied."
+
+#: modules/example/components/ExampleDashboard.tsx:48
+msgid "My items"
+msgstr "My items"
+
+#: app/[language]/(public)/page.tsx:10
+msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
+msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
+
+#: modules/landing/components/Page.tsx:21
+msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
+msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
+
+#: modules/example/components/ExampleDashboard.tsx:62
+msgid "View all items (admin)"
+msgstr "View all items (admin)"
+
+#: modules/example/components/ExampleDashboard.tsx:45
+msgid "Starter pack · example module"
+msgstr "Starter pack · example module"
+
+#: modules/landing/components/Page.tsx:34
+msgid "Log in"
+msgstr "Log in"
+
+#: modules/example/components/ExampleDashboard.tsx:51
+msgid "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."
+msgstr "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."

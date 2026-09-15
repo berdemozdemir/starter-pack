@@ -42,6 +42,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# lingui compiled catalogs
+locales/*.js
+
 # local notes
 .continue.md
 continue.md

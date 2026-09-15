@@ -1,0 +1,33 @@
+name: i18n
+
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  lingui-extract-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup node.js & pnpm
+        uses: ./.github/actions/setup
+
+      - name: Extract Lingui catalogs
+        run: pnpm i18n:extract
+
+      - name: Check Lingui catalogs are up to date
+        run: |
+          if ! git diff --quiet -I 'POT-Creation-Date' -- locales/; then
+            echo "::error::Lingui catalogs are out of date."
+            echo "::error::Run 'pnpm i18n:extract', fill empty translations in locales/tr.po, and push."
+            git diff -I 'POT-Creation-Date' -- locales/
+            exit 1
+          fi
+
+      - name: Fail on missing translations
+        run: pnpm exec lingui compile --strict

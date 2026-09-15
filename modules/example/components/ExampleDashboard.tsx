@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import { Trans, useLingui } from '@lingui/react/macro';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
@@ -17,13 +18,14 @@ import { EmptyState } from './EmptyState';
 import { InfiniteScrollSentinel } from '@/components/ui/InfiniteScrollSentinel';
 
 export function ExampleDashboard() {
+  const { t } = useLingui();
   const authQuery = useAuthQuery();
   const itemsQuery = useExampleItemsInfiniteQuery();
   const deleteMutation = useMutation(service_example.mutations.delete());
 
   const removeItem = async (id: string) => {
     await deleteMutation.mutateAsync({ id });
-    toast.success('Item deleted');
+    toast.success(t`Item deleted`);
   };
 
   if (itemsQuery.data) {
@@ -37,12 +39,16 @@ export function ExampleDashboard() {
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
         <header className="space-y-2">
           <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Starter pack · example module
+            <Trans>Starter pack · example module</Trans>
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight">My items</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            <Trans>My items</Trans>
+          </h1>
           <p className="text-muted-foreground text-sm">
-            This page shows the <code>modules/example</code> pattern: protected
-            oRPC, TanStack Query, owner-scoped CRUD.
+            <Trans>
+              This page shows the <code>modules/example</code> pattern:
+              protected oRPC, TanStack Query, owner-scoped CRUD.
+            </Trans>
           </p>
           {isAdmin && (
             <p>
@@ -50,7 +56,7 @@ export function ExampleDashboard() {
                 href={paths.admin.base}
                 className="text-sm font-medium underline-offset-4 hover:underline"
               >
-                View all items (admin)
+                <Trans>View all items (admin)</Trans>
               </Link>
             </p>
           )}
@@ -84,7 +90,7 @@ export function ExampleDashboard() {
                     disabled={deleteMutation.isPending}
                     onClick={() => void removeItem(item.id)}
                   >
-                    Delete
+                    <Trans>Delete</Trans>
                   </Button>
                 </li>
               ))}
@@ -104,8 +110,10 @@ export function ExampleDashboard() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-10">
         <p className="text-destructive text-sm">
-          Could not load items. Make sure you are signed in and migrations have
-          been applied.
+          <Trans>
+            Could not load items. Make sure you are signed in and migrations
+            have been applied.
+          </Trans>
         </p>
       </div>
     );

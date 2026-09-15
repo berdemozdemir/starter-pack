@@ -29,7 +29,7 @@ function AdminItems() {
           <h1 className="text-2xl font-semibold tracking-tight">All items</h1>
           <p className="text-muted-foreground text-sm">
             This route is gated by <code>requireAdmin()</code> in{' '}
-            <code>app/admin/layout.tsx</code> and loaded with{' '}
+            <code>app/[language]/admin/layout.tsx</code> and loaded with{' '}
             <code>procedure_admin</code>. Members are redirected away.
           </p>
           <p>

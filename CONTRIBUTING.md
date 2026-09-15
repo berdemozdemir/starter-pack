@@ -5,7 +5,7 @@
 1. Create a branch (see naming below)
 2. Write code following project conventions (see `AGENTS.md` and `.cursor/rules/`)
 3. Open a PR targeting `develop`
-4. Ensure CI passes (`tests-ci`, `verify-migrations-integrity`)
+4. Ensure CI passes (`tests-ci`, `verify-migrations-integrity`, `i18n`)
 5. Squash-merge after review
 
 ## Commit messages
@@ -47,7 +47,9 @@ Examples: `feature/example-list-filters`, `fix/auth-callback-redirect`.
 Full conventions live in `.cursor/rules/`. Key points:
 
 - oRPC handlers in `modules/*/actions/`, TanStack Query via `service_*` objects
-- User-facing strings in English by default
+- Public copy: English source + Lingui; `pnpm i18n:extract` then fill `locales/tr.po`
+- `LinguiClientProvider` stays in `components/providers` (app-wide)
+- App pages live under `app/[language]/`; links use unprefixed `paths.*` (middleware adds the locale)
 - Minimal diffs — no drive-by refactors
 - Schema changes: `pnpm drizzle:generate` → commit migration files → test with `pnpm drizzle:migrate`. Tables that spread `...timestamps` must also get `trg_set_updated_at` in that migration (see `.cursor/rules/core-typescript.mdc`)
 
