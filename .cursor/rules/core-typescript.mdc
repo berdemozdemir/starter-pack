@@ -111,10 +111,43 @@ CREATE POLICY → who (anon/authenticated) may read/write which rows
 - Server `message` fields: user-friendly English
 - No i18n libraries unless explicitly requested
 
+## Forms (create / update)
+
+- Primary submit button: bottom-right (`flex justify-end` on the actions row)
+- Disable submit when the form is unchanged: `disabled={!form.formState.isDirty || mutation.isPending}` (also disable while pending)
+- After successful submit, `form.reset(...)` so `isDirty` returns to false
+
+## Component hook order
+
+In components, declare hooks in this order:
+
+1. Local state / form hooks (`useState`, `useForm`, …)
+2. Queries (`usePublicQuery` / `useSessionQuery`)
+3. Mutations (`useMutation`)
+4. Derived values and handlers
+
+```tsx
+export function ExampleDashboard() {
+  const [filter, setFilter] = useState('all');
+  const itemsQuery = useListMineQuery();
+  const deleteMutation = useMutation(service_example.mutations.delete());
+  // ...
+}
+```
+
 ## TanStack Query in components
 
-- Check `.data` first, then errors, then loading — not `isSuccess`
+- Render order: `.data` first, then `.isError`, then loading as the final fallthrough — not `isSuccess`, and not error-before-data
+- Do not destructure query `.data` into locals (`const { items } = query.data`) — use `query.data.field` in JSX
 - Use `usePublicQuery` / `useSessionQuery` — not raw `useQuery`
+
+```tsx
+if (itemsQuery.data) return <List items={itemsQuery.data.items} />;
+
+if (itemsQuery.isError) return <p>Could not load items</p>;
+
+return <Skeleton />;
+```
 
 ## Skip commenting on
 

@@ -51,6 +51,9 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - `queryOptions()` / `mutationOptions()` + `okOrThrow`
 - Components use `usePublicQuery` or `useSessionQuery` — not raw `useQuery`
 - Prefer invalidating via `onSuccess` + `queryClient.invalidateQueries` (or `meta.invalidates`)
+- Component hook order: local state / forms → queries → mutations → handlers
+- Do not destructure query `.data` into locals — use `query.data.field` in JSX
+- Render: `.data` first, then `.isError`, then loading — not `isSuccess`
 
 ### Pages
 
@@ -94,6 +97,12 @@ export default function DashboardPage() {
   hasItems && <ItemList items={items} />;
 }
 ```
+
+### Forms
+
+- Submit button bottom-right (`flex justify-end`)
+- Disable submit when unchanged: `disabled={!form.formState.isDirty || mutation.isPending}`
+- After success, `form.reset(...)` so dirty state clears
 
 ### Database
 
@@ -173,5 +182,6 @@ Add your product domains to this table as you build them.
 - No destructuring `args` in long functions — use `args.field` directly
 - No `handle*` on your own functions (library APIs like `form.handleSubmit` are fine)
 - No `condition ? <Node /> : null` — use `condition && <Node />`
+- No destructuring query `.data` into locals — use `query.data.field`
 - No `.delete()` on content tables — use `softDeleteNow()`
 - No app-table `CREATE POLICY` unless you query via Supabase `anon`/`authenticated`
