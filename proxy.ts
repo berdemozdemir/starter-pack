@@ -3,7 +3,6 @@ import { updateSession } from '@/integrations/supabase/middleware';
 import { paths } from '@/lib/paths';
 import { createClient } from './integrations/supabase/supabase-server';
 
-// TODO: add use i18n middleware here, can cheat from udao
 export async function proxy(request: NextRequest) {
   return runMiddleware(request, [useSessionMiddleware, useAuthMiddleware]);
 }

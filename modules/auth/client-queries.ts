@@ -15,8 +15,6 @@ import { ResetPasswordFormSchemaRequest } from './schemas/reset-password';
 
 const supabase = createSupabaseBrowserClient();
 
-// TODO: add update login with google
-
 export const service_auth = {
   queries: {
     auth: () =>

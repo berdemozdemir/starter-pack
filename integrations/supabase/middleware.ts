@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
 /**
- * Refreshes the user session on each matched request. Call from root `middleware.ts`.
+ * Refreshes the user session on each matched request. Call from root `proxy.ts`.
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({

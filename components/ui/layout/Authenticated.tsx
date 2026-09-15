@@ -11,9 +11,8 @@ export function Authenticated({ children }: PropsWithChildren) {
 
   const { data, isPending, isFetching } = useAuthQuery();
 
-  // After login, auth query is invalidated; cached { isLoggedIn: false } from the marketing
-  // header can still be present while a refetch runs. In that window isLoading is false but
-  // the session is valid—wait until the refetch finishes before redirecting to login.
+  // After login, auth query is invalidated; a stale cached { isLoggedIn: false } can remain
+  // while a refetch runs. Wait until the refetch finishes before redirecting to login.
   const waitingOnAuth = isPending || (isFetching && !data?.isLoggedIn);
 
   useEffect(() => {
