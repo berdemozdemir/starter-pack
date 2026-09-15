@@ -7,11 +7,10 @@ import {
   useQuery,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { cache } from 'react';
 import { createQueryClient } from './query-client';
 import { useAuthQuery } from '@/modules/auth/client-queries';
 
-export const queryClient = cache(createQueryClient)();
+export const queryClient = createQueryClient();
 
 /** Sends request without requiring session */
 export const usePublicQuery = <
