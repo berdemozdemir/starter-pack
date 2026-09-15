@@ -1,6 +1,13 @@
+import { and, eq } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/integrations/drizzle/drizzle-client';
 import { updateSession } from '@/integrations/supabase/middleware';
+import { notDeleted } from '@/lib/db/not-deleted';
 import { paths } from '@/lib/paths';
+import { table_users } from '@/modules/auth/db-tables';
+import { isUserRole, UserRoles } from '@/modules/auth/types/user-role';
+import { homePathForRole } from '@/modules/auth/utils/home-path-for-role';
+import { tryCatchDb } from '@/lib/result';
 import { createClient } from './integrations/supabase/supabase-server';
 
 export async function proxy(request: NextRequest) {
@@ -50,35 +57,21 @@ async function useSessionMiddleware(
   return updateSession(request);
 }
 
-/**
- * Authenticated users cannot view the marketing home page; send them to the dashboard.
- */
 async function useAuthMiddleware(request: NextRequest, response: NextResponse) {
-  const protectedPages = [paths.dashboard.base] as const;
-  const guestOnlyAuthPages = [
-    paths.auth.login,
-    paths.auth.signup,
-    paths.auth.forgotPassword,
-  ] as const;
-
-  const isAccessingProtectedPage =
-    protectedPages.filter((pageUrl) =>
-      request.nextUrl.pathname.startsWith(pageUrl),
-    ).length > 0;
-
-  const isAccessingLandingPage = request.nextUrl.pathname === '/';
-
+  const pathname = request.nextUrl.pathname;
+  const isAccessingDashboard = pathname.startsWith(paths.dashboard.base);
+  const isAccessingAdmin = pathname.startsWith(paths.admin.base);
+  const isAccessingProtectedPage = isAccessingDashboard || isAccessingAdmin;
+  const isAccessingLandingPage = pathname === '/';
   const isAccessingGuestOnlyAuthPage =
-    guestOnlyAuthPages.filter((pageUrl) =>
-      request.nextUrl.pathname.startsWith(pageUrl),
-    ).length > 0;
+    pathname === paths.auth.login ||
+    pathname === paths.auth.signup ||
+    pathname === paths.auth.forgotPassword;
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-
   const isLoggedIn = !error && !!data.user;
 
-  // redirect unauthenticated users attempting to access protected pages to login (with callback)
   if (!isLoggedIn && isAccessingProtectedPage) {
     const callbackUrl = request.nextUrl.pathname;
     return NextResponse.redirect(
@@ -86,14 +79,31 @@ async function useAuthMiddleware(request: NextRequest, response: NextResponse) {
     );
   }
 
-  // authenticated users should not go to the landing page
-  if (isLoggedIn && isAccessingLandingPage)
-    return NextResponse.redirect(new URL(paths.dashboard.base, request.url));
+  if (!isLoggedIn) return response;
 
-  // authenticated users should not go to login/signup/forgot-password
-  if (isLoggedIn && isAccessingGuestOnlyAuthPage)
-    return NextResponse.redirect(new URL(paths.dashboard.base, request.url));
+  const [profileErr, rows] = await tryCatchDb(() =>
+    db
+      .select({ role: table_users.role })
+      .from(table_users)
+      .where(and(eq(table_users.id, data.user.id), notDeleted(table_users)))
+      .limit(1),
+  );
 
-  // otherwise, everything is a-ok.
+  const role = rows?.[0]?.role;
+
+  if (profileErr || !role || !isUserRole(role)) {
+    if (isAccessingProtectedPage)
+      return NextResponse.redirect(new URL(paths.unauthorized, request.url));
+    return response;
+  }
+
+  const homePath = homePathForRole(role);
+
+  if (isAccessingLandingPage || isAccessingGuestOnlyAuthPage)
+    return NextResponse.redirect(new URL(homePath, request.url));
+
+  if (isAccessingAdmin && role !== UserRoles.Admin)
+    return NextResponse.redirect(new URL(homePath, request.url));
+
   return response;
 }

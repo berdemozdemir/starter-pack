@@ -1,11 +1,10 @@
-import { AuthenticatedPage } from '@/components/ui/layout/Authenticated';
+import { PageLayout } from '@/components/ui/layout/PageLayout';
 import { ExampleDashboard } from './ExampleDashboard';
 
-//  Module page shell — wire from a thin `app/**/page.tsx` when you need a route.
 export function Page() {
   return (
-    <AuthenticatedPage>
+    <PageLayout>
       <ExampleDashboard />
-    </AuthenticatedPage>
+    </PageLayout>
   );
 }

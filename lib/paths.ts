@@ -5,6 +5,10 @@ export const paths = {
     base: '/dashboard',
   },
 
+  admin: {
+    base: '/admin',
+  },
+
   unauthorized: '/unauthorized',
 
   auth: {

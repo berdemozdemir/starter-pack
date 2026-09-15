@@ -30,7 +30,9 @@ const orpc_createItem = procedure_protected
 
 ## Auth
 
-- `procedure_public` vs `procedure_protected` — pick the correct one
+- `procedure_public` — no auth
+- `procedure_protected` — any signed-in user
+- `procedure_admin` — `admin` role only
 
 ## Soft delete
 

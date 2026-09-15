@@ -4,3 +4,8 @@ export type ExampleItem = {
   notes: string | undefined;
   createdAt: Date;
 };
+
+export type ExampleAdminItem = ExampleItem & {
+  ownerName: string;
+  ownerEmail: string;
+};

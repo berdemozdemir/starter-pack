@@ -38,6 +38,8 @@ export const service_auth = {
               case 'supabase-error':
               case 'email-missing':
               case 'user-is-not-logged-in':
+              case 'profile-missing':
+              case 'profile-load-failed':
                 await supabase.auth.signOut();
                 return { isLoggedIn: false };
               default:
@@ -51,6 +53,7 @@ export const service_auth = {
               id: sessionData.userId,
               email: sessionData.userEmail,
               fullName: sessionData.userFullName,
+              role: sessionData.role,
               metadata: supabaseSession.user?.user_metadata,
             },
           };

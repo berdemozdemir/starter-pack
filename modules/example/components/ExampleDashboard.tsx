@@ -1,14 +1,19 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { paths } from '@/lib/paths';
+import { useAuthQuery } from '@/modules/auth/client-queries';
+import { UserRoles } from '@/modules/auth/types/user-role';
 import { useExampleItemsQuery, service_example } from '../client-queries';
 import { CreateItemForm } from './CreateItemForm';
 import { EmptyState } from './EmptyState';
 
 export function ExampleDashboard() {
+  const authQuery = useAuthQuery();
   const itemsQuery = useExampleItemsQuery();
   const deleteMutation = useMutation(service_example.mutations.delete());
 
@@ -18,8 +23,10 @@ export function ExampleDashboard() {
   };
 
   if (itemsQuery.data) {
-    const { items } = itemsQuery.data;
-    const hasItems = items.length > 0;
+    const hasItems = itemsQuery.data.items.length > 0;
+    const isAdmin =
+      authQuery.data?.isLoggedIn &&
+      authQuery.data.user.role === UserRoles.Admin;
 
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
@@ -32,6 +39,16 @@ export function ExampleDashboard() {
             This page shows the <code>modules/example</code> pattern: protected
             oRPC, TanStack Query, owner-scoped CRUD.
           </p>
+          {isAdmin && (
+            <p>
+              <Link
+                href={paths.admin.base}
+                className="text-sm font-medium underline-offset-4 hover:underline"
+              >
+                View all items (admin)
+              </Link>
+            </p>
+          )}
         </header>
 
         <CreateItemForm />
@@ -40,7 +57,7 @@ export function ExampleDashboard() {
 
         {hasItems && (
           <ul className="space-y-3">
-            {items.map((item) => (
+            {itemsQuery.data.items.map((item) => (
               <li
                 key={item.id}
                 className="border-border/60 bg-card flex items-start justify-between gap-4 rounded-xl border p-4"

@@ -1,4 +1,5 @@
 import { UserMetadata } from '@supabase/supabase-js';
+import type { UserRole } from './types/user-role';
 
 export type AuthenticatedSession = {
   isLoggedIn: true;
@@ -6,6 +7,7 @@ export type AuthenticatedSession = {
     id: string;
     email: string;
     fullName: string;
+    role: UserRole;
     metadata: UserMetadata;
   };
 };

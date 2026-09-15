@@ -13,6 +13,11 @@ export const service_example = {
         queryKey: orpc.example.listMine.queryOptions().queryKey,
         queryFn: () => orpc.example.listMine.call().then(okOrThrow),
       }),
+    listAll: () =>
+      queryOptions({
+        queryKey: orpc.example.listAll.queryOptions().queryKey,
+        queryFn: () => orpc.example.listAll.call().then(okOrThrow),
+      }),
   },
   mutations: {
     create: () =>
@@ -22,6 +27,9 @@ export const service_example = {
         onSuccess: async () => {
           await queryClient.invalidateQueries({
             queryKey: service_example.queries.list().queryKey,
+          });
+          await queryClient.invalidateQueries({
+            queryKey: service_example.queries.listAll().queryKey,
           });
         },
       }),
@@ -34,6 +42,9 @@ export const service_example = {
           await queryClient.invalidateQueries({
             queryKey: service_example.queries.list().queryKey,
           });
+          await queryClient.invalidateQueries({
+            queryKey: service_example.queries.listAll().queryKey,
+          });
         },
       }),
   },
@@ -41,3 +52,6 @@ export const service_example = {
 
 export const useExampleItemsQuery = () =>
   useSessionQuery(service_example.queries.list());
+
+export const useExampleAdminItemsQuery = () =>
+  useSessionQuery(service_example.queries.listAll());

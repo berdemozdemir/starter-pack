@@ -23,6 +23,8 @@ import { toUserFacingSupabaseAuthMessage } from '../utils/supabase-auth-message'
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { queryClient } from '@/integrations/tanstack-query/query';
+import { homePathForRole } from '../utils/home-path-for-role';
+import type { AuthQueryResult } from '../types';
 
 const supabase = createSupabaseBrowserClient();
 
@@ -44,24 +46,18 @@ export const LoginForm = () => {
 
     await supabase.auth.refreshSession();
 
-    const { data: sessionData } = await supabase.auth.getSession();
+    await queryClient.refetchQueries({
+      queryKey: service_auth.queries.auth().queryKey,
+    });
 
-    if (sessionData.session?.user) {
-      queryClient.setQueryData(service_auth.queries.auth().queryKey, {
-        isLoggedIn: true,
-        user: {
-          id: sessionData.session?.user.id,
-          email: sessionData.session?.user.email ?? '',
-          fullName:
-            (sessionData.session?.user.user_metadata?.name as string) ?? '',
-          metadata: sessionData.session?.user.user_metadata ?? {},
-        },
-      });
-    }
+    const auth = queryClient.getQueryData<AuthQueryResult>(
+      service_auth.queries.auth().queryKey,
+    );
 
     toast.success('Signed in successfully');
 
-    router.push(paths.dashboard.base);
+    if (auth?.isLoggedIn) router.push(homePathForRole(auth.user.role));
+    else router.push(paths.dashboard.base);
   });
 
   return (

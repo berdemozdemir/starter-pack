@@ -92,23 +92,31 @@ Storage is **optional**. This starter does not create buckets. When you need upl
 | Supabase Studio  | http://127.0.0.1:54323 |
 | Email (Inbucket) | http://127.0.0.1:54324 |
 
+Signup creates a `member`. To try `/admin` (gated by `requireAdmin()` + `procedure_admin`):
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
+```
+
+Then sign in again. Members hitting `/admin` are sent back to `/dashboard`.
+
 ---
 
 ## Turn this clone into your product
 
-| #   | Change                     | Where                                                        |
-| --- | -------------------------- | ------------------------------------------------------------ |
-| 1   | Package name               | `package.json` → `name`                                      |
-| 2   | Site name                  | `lib/constants/site.ts`, `app/layout.tsx` metadata           |
-| 3   | App URL                    | `.env.local` → `NEXT_PUBLIC_APP_URL`                         |
-| 4   | Supabase project           | `.env.local` URL + keys                                      |
-| 5   | Brand / colors / fonts     | `app/globals.css`, `app/layout.tsx`                          |
+| #   | Change                     | Where                                                                                   |
+| --- | -------------------------- | --------------------------------------------------------------------------------------- |
+| 1   | Package name               | `package.json` → `name`                                                                 |
+| 2   | Site name                  | `lib/constants/site.ts`, `app/layout.tsx` metadata                                      |
+| 3   | App URL                    | `.env.local` → `NEXT_PUBLIC_APP_URL`                                                    |
+| 4   | Supabase project           | `.env.local` URL + keys                                                                 |
+| 5   | Brand / colors / fonts     | `app/globals.css`, `app/layout.tsx`                                                     |
 | 5b  | Auth email template        | `supabase/config.toml` recovery `subject` + `supabase/templates/recovery.html` branding |
-| 6   | Routes                     | `lib/paths.ts`                                               |
-| 7   | Storage buckets (optional) | setup script + `integrations/supabase/policies/` when needed |
-| 8   | CI environments            | `.github/workflows/*` + GitHub Environments                  |
-| 9   | Example module             | Delete or morph into your first domain                       |
-| 10  | Docs                       | Keep README for humans; update AGENTS domain table           |
+| 6   | Routes                     | `lib/paths.ts`                                                                          |
+| 7   | Storage buckets (optional) | setup script + `integrations/supabase/policies/` when needed                            |
+| 8   | CI environments            | `.github/workflows/*` + GitHub Environments                                             |
+| 9   | Example module             | Delete or morph into your first domain                                                  |
+| 10  | Docs                       | Keep README for humans; update AGENTS domain table                                      |
 
 ### Minimum Drizzle aggregator (starter)
 
@@ -230,4 +238,5 @@ Details: **AGENTS.md** and **`.cursor/rules/`**.
 - Never commit `.env.local` or production secrets
 - Keep `modules/example` so newcomers learn by reading it
 - Ship README + AGENTS.md + `.cursor/rules` together
+
 # guneyagizvedis

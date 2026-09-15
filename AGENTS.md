@@ -14,7 +14,7 @@ Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summ
 
 - Auth module (login, signup, session, password reset)
 - Request edge in `proxy.ts` (Supabase session refresh + guest/protected redirects)
-- oRPC API layer (`/api/rpc`) with `procedure_public` / `procedure_protected`
+- oRPC API layer (`/api/rpc`) with `procedure_public` / `procedure_protected` / `procedure_admin`
 - Drizzle + Postgres (local Supabase) + migration scripts
 - TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery`
 - Demo domain: `modules/example` (owner-scoped items CRUD) — delete after your first real domain
@@ -43,7 +43,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - Handler logic **inline** inside `.handler()` — no separate handler functions
 - Use `tryCatch` / `tryCatchDb` + `ok` / `err` from `@/lib/result` — never throw (except in DB transactions)
 - Server-side calls: chain `.callable()` and invoke directly — no HTTP client
-- Auth: `procedure_public` vs `procedure_protected`
+- Auth: `procedure_public` (none) / `procedure_protected` (signed in) / `procedure_admin` (`admin` role)
 
 ### Client queries (`modules/*/client-queries.ts`)
 
@@ -60,24 +60,12 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - `app/**/page.tsx` = minimal wiring only
 - Logic and UI live in `modules/*/components/` (e.g. `Page`, `ExampleDashboard`)
 - Module page component is always named `Page` — the module path already scopes it
-- Protected UI: wrap with `<Authenticated />` or `<AuthenticatedPage />` inside the module `Page` when possible
+- Protected UI: gate in the route **layout** — `requireAuth()` on `app/dashboard/layout.tsx`, `requireAdmin()` on `app/admin/layout.tsx`. `proxy.ts` is the first redirect; oRPC `procedure_*` is the API gate. `PageLayout` is chrome, not auth.
 
 ```tsx
-// modules/example/components/Page.tsx
-export function Page() {
-  return (
-    <AuthenticatedPage>
-      <ExampleDashboard />
-    </AuthenticatedPage>
-  );
-}
-
-// app/dashboard/page.tsx
-import { Page } from '@/modules/example/components/Page';
-
-export default function DashboardPage() {
-  return <Page />;
-}
+// app/dashboard/layout.tsx — requireAuth()
+// app/admin/layout.tsx — requireAdmin()
+// app/**/page.tsx — thin; module Page = content + PageLayout
 ```
 
 ### JSX conditionals
@@ -165,10 +153,10 @@ CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`.
 
 ## Domains in this starter
 
-| Module    | Purpose                                                          |
-| --------- | ---------------------------------------------------------------- |
-| `auth`    | Login, signup, password reset, session                           |
-| `example` | Teachable owner-scoped CRUD — **delete after first real domain** |
+| Module    | Purpose                                                                           |
+| --------- | --------------------------------------------------------------------------------- |
+| `auth`    | Login, signup, password reset, session, roles (`member` / `admin`)                |
+| `example` | Teachable owner-scoped CRUD + admin list-all — **delete after first real domain** |
 
 Add your product domains to this table as you build them.
 
