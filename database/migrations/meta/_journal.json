@@ -8,6 +8,13 @@
       "when": 1784809642298,
       "tag": "0000_green_jack_power",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789490935876,
+      "tag": "0001_flat_northstar",
+      "breakpoints": true
     }
   ]
 }

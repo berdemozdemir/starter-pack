@@ -1,4 +1,5 @@
 import { procedure_protected } from '@/integrations/orpc/procedure';
+import { notDeleted, softDeleteNow } from '@/lib/db/not-deleted';
 import { err, ok, tryCatchDb } from '@/lib/result';
 import { and, eq } from 'drizzle-orm';
 import { table_items } from '../db-tables';
@@ -9,11 +10,13 @@ export const orpc_example_deleteItem = procedure_protected
   .handler(async ({ input, context: { db, auth } }) => {
     const [deleteErr, deleted] = await tryCatchDb(() =>
       db
-        .delete(table_items)
+        .update(table_items)
+        .set(softDeleteNow())
         .where(
           and(
             eq(table_items.id, input.id),
             eq(table_items.ownerId, auth.userId),
+            notDeleted(table_items),
           ),
         )
         .returning({ id: table_items.id }),

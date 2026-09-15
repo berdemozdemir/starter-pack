@@ -31,3 +31,26 @@ const orpc_createItem = procedure_protected
 ## Auth
 
 - `procedure_public` vs `procedure_protected` — pick the correct one
+
+## Soft delete
+
+Always use `notDeleted` / `softDeleteNow` from `@/lib/db/not-deleted`. Do not inline `isNull(deletedAt)` or set `deletedAt` manually.
+
+```typescript
+import { notDeleted, softDeleteNow } from '@/lib/db/not-deleted';
+
+// read / update / existence check
+.where(and(eq(table_items.id, input.id), notDeleted(table_items)))
+
+// join: hide rows whose related content is soft-deleted
+.innerJoin(table_users, eq(table_items.ownerId, table_users.id))
+.where(and(..., notDeleted(table_items), notDeleted(table_users)))
+
+// delete content
+.update(table_items)
+.set(softDeleteNow())
+.where(and(eq(table_items.id, input.id), notDeleted(table_items)))
+```
+
+- Never `.delete()` content tables
+- Exception: composite-PK junction tables may stay `.delete()`

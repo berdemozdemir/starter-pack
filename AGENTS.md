@@ -97,7 +97,9 @@ export default function DashboardPage() {
 
 ### Database
 
-- Table vars: `table_*`, enums: `pgEnum_*`, timestamps: `...timestamps` from `@/lib/db/timestamps`
+- Table vars: `table_*`, enums: `pgEnum_*`, timestamps: `...timestamps` from `@/lib/db/timestamps` (`createdAt`, `updatedAt`, `deletedAt`)
+- Soft delete: `notDeleted(table)` / `softDeleteNow()` from `@/lib/db/not-deleted`. Reads/updates always filter `notDeleted`; content deletes are `update().set(softDeleteNow())` — never `.delete()` except composite-PK junction tables
+- Unique slugs: partial unique index `WHERE deleted_at IS NULL` — do not use `.unique()` on the slug column
 - Schema changes: edit `db-tables.ts` → register in `integrations/drizzle/drizzle-schema.ts` → `pnpm drizzle:generate` → commit SQL → `pnpm drizzle:migrate`
 - App tables: auth via oRPC (no Postgres RLS required when querying with `DATABASE_URL`)
 - Supabase Storage is **optional**: add RLS under `integrations/supabase/policies/` only when you introduce buckets
@@ -170,3 +172,4 @@ Add your product domains to this table as you build them.
 - No destructuring `args` in long functions — use `args.field` directly
 - No `handle*` on your own functions (library APIs like `form.handleSubmit` are fine)
 - No `condition ? <Node /> : null` — use `condition && <Node />`
+- No `.delete()` on content tables — use `softDeleteNow()`
