@@ -4,6 +4,7 @@ import {
   getAvailableLocaleCodes,
   isSupportedLocaleCode,
 } from '@/lib/i18n/config';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { LanguageSwitcher } from '@/lib/i18n/components/LanguageSwitcher';
 
 export function generateStaticParams() {
@@ -21,7 +22,10 @@ export default async function LocaleLayout(props: {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="flex justify-end px-6 py-4">
-        <LanguageSwitcher />
+        <div className="flex items-center gap-2">
+          <ThemeSwitcher />
+          <LanguageSwitcher />
+        </div>
       </header>
 
       <div className="flex flex-1 flex-col">{props.children}</div>

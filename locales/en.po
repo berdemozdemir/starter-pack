@@ -13,35 +13,43 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: lib/i18n/components/LanguageSwitcher.tsx:48
+#: lib/i18n/components/LanguageSwitcher.tsx:50
 msgid "Change language"
 msgstr "Change language"
 
-#: modules/landing/components/Page.tsx:46
+#: components/ThemeSwitcher.tsx:47
+msgid "Light"
+msgstr "Light"
+
+#: modules/landing/components/Page.tsx:42
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: modules/example/components/ExampleDashboard.tsx:96
+#: modules/example/components/ExampleDashboard.tsx:93
 msgid "Delete"
 msgstr "Delete"
 
-#: modules/landing/components/Page.tsx:40
+#: components/ThemeSwitcher.tsx:55
+msgid "System"
+msgstr "System"
+
+#: modules/landing/components/Page.tsx:36
 msgid "Sign up"
 msgstr "Sign up"
 
-#: modules/landing/components/Page.tsx:17
+#: modules/landing/components/Page.tsx:13
 msgid "Next.js starter"
 msgstr "Next.js starter"
 
-#: modules/example/components/ExampleDashboard.tsx:31
+#: modules/example/components/ExampleDashboard.tsx:28
 msgid "Item deleted"
 msgstr "Item deleted"
 
-#: modules/example/components/ExampleDashboard.tsx:116
+#: modules/example/components/ExampleDashboard.tsx:113
 msgid "Could not load items. Make sure you are signed in and migrations have been applied."
 msgstr "Could not load items. Make sure you are signed in and migrations have been applied."
 
-#: modules/example/components/ExampleDashboard.tsx:48
+#: modules/example/components/ExampleDashboard.tsx:45
 msgid "My items"
 msgstr "My items"
 
@@ -49,22 +57,31 @@ msgstr "My items"
 msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
 msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
 
-#: modules/landing/components/Page.tsx:21
+#: modules/landing/components/Page.tsx:17
 msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
 msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
 
-#: modules/example/components/ExampleDashboard.tsx:62
+#: modules/example/components/ExampleDashboard.tsx:59
 msgid "View all items (admin)"
 msgstr "View all items (admin)"
 
-#: modules/example/components/ExampleDashboard.tsx:45
+#: modules/example/components/ExampleDashboard.tsx:42
 msgid "Starter pack · example module"
 msgstr "Starter pack · example module"
 
-#: modules/landing/components/Page.tsx:34
+#: components/ThemeSwitcher.tsx:51
+msgid "Dark"
+msgstr "Dark"
+
+#: modules/landing/components/Page.tsx:30
 msgid "Log in"
 msgstr "Log in"
 
-#: modules/example/components/ExampleDashboard.tsx:51
+#: components/ThemeSwitcher.tsx:31
+#: components/ThemeSwitcher.tsx:32
+msgid "Change theme"
+msgstr "Change theme"
+
+#: modules/example/components/ExampleDashboard.tsx:48
 msgid "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."
 msgstr "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."

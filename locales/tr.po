@@ -13,35 +13,43 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: lib/i18n/components/LanguageSwitcher.tsx:48
+#: lib/i18n/components/LanguageSwitcher.tsx:50
 msgid "Change language"
 msgstr "Dili değiştir"
 
-#: modules/landing/components/Page.tsx:46
+#: components/ThemeSwitcher.tsx:47
+msgid "Light"
+msgstr "Açık"
+
+#: modules/landing/components/Page.tsx:42
 msgid "Dashboard"
 msgstr "Kontrol paneli"
 
-#: modules/example/components/ExampleDashboard.tsx:96
+#: modules/example/components/ExampleDashboard.tsx:93
 msgid "Delete"
 msgstr "Sil"
 
-#: modules/landing/components/Page.tsx:40
+#: components/ThemeSwitcher.tsx:55
+msgid "System"
+msgstr "Sistem"
+
+#: modules/landing/components/Page.tsx:36
 msgid "Sign up"
 msgstr "Kayıt ol"
 
-#: modules/landing/components/Page.tsx:17
+#: modules/landing/components/Page.tsx:13
 msgid "Next.js starter"
 msgstr "Next.js başlangıç paketi"
 
-#: modules/example/components/ExampleDashboard.tsx:31
+#: modules/example/components/ExampleDashboard.tsx:28
 msgid "Item deleted"
 msgstr "Öğe silindi"
 
-#: modules/example/components/ExampleDashboard.tsx:116
+#: modules/example/components/ExampleDashboard.tsx:113
 msgid "Could not load items. Make sure you are signed in and migrations have been applied."
 msgstr "Öğeler yüklenemedi. Oturum açtığınızdan ve migrasyonların uygulandığından emin olun."
 
-#: modules/example/components/ExampleDashboard.tsx:48
+#: modules/example/components/ExampleDashboard.tsx:45
 msgid "My items"
 msgstr "Öğelerim"
 
@@ -49,22 +57,31 @@ msgstr "Öğelerim"
 msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
 msgstr "Auth, oRPC, Drizzle, Supabase ve TanStack Query kuralları — silinebilir bir modules/example CRUD demosu."
 
-#: modules/landing/components/Page.tsx:21
+#: modules/landing/components/Page.tsx:17
 msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
 msgstr "Auth, oRPC, Drizzle, Supabase ve TanStack Query kuralları — silinebilir bir <0>modules/example</0> CRUD demosu."
 
-#: modules/example/components/ExampleDashboard.tsx:62
+#: modules/example/components/ExampleDashboard.tsx:59
 msgid "View all items (admin)"
 msgstr "Tüm öğeleri görüntüle (yönetici)"
 
-#: modules/example/components/ExampleDashboard.tsx:45
+#: modules/example/components/ExampleDashboard.tsx:42
 msgid "Starter pack · example module"
 msgstr "Başlangıç paketi · örnek modül"
 
-#: modules/landing/components/Page.tsx:34
+#: components/ThemeSwitcher.tsx:51
+msgid "Dark"
+msgstr "Koyu"
+
+#: modules/landing/components/Page.tsx:30
 msgid "Log in"
 msgstr "Giriş yap"
 
-#: modules/example/components/ExampleDashboard.tsx:51
+#: components/ThemeSwitcher.tsx:31
+#: components/ThemeSwitcher.tsx:32
+msgid "Change theme"
+msgstr "Temayı değiştir"
+
+#: modules/example/components/ExampleDashboard.tsx:48
 msgid "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."
 msgstr "Bu sayfa <0>modules/example</0> desenini gösterir: korumalı oRPC, TanStack Query, sahip kapsamlı CRUD."

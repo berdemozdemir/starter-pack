@@ -114,6 +114,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - Links and redirects use unprefixed `paths.*` (`/auth/login`, `/dashboard`). `proxy.ts` adds the locale prefix
 - After changing copy: `pnpm i18n:extract` → fill `locales/tr.po` → `pnpm i18n:compile`
 - Language switcher: `@/lib/i18n/components/LanguageSwitcher` in `app/[language]/layout.tsx`
+- Theme switcher: `@/components/ThemeSwitcher` next to the language switcher (`next-themes`, light / dark / system)
 
 ## Commands
 
