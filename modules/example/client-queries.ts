@@ -1,17 +1,29 @@
-import { mutationOptions, queryOptions } from '@tanstack/react-query';
+import {
+  infiniteQueryOptions,
+  mutationOptions,
+  queryOptions,
+} from '@tanstack/react-query';
 import { okOrThrow, type ArgsOf } from '@/lib/result';
 import { orpc } from '@/integrations/orpc/client';
 import {
   queryClient,
+  useSessionInfiniteQuery,
   useSessionQuery,
 } from '@/integrations/tanstack-query/query';
+import { LIST_PAGE_SIZE } from '@/lib/constants/list-page-size';
+import type { CreatedAtCursor } from '@/lib/db/created-at-cursor';
 
 export const service_example = {
   queries: {
     list: () =>
-      queryOptions({
-        queryKey: orpc.example.listMine.queryOptions().queryKey,
-        queryFn: () => orpc.example.listMine.call().then(okOrThrow),
+      infiniteQueryOptions({
+        queryKey: orpc.example.listMine.key({ type: 'infinite' }),
+        queryFn: ({ pageParam }) =>
+          orpc.example.listMine
+            .call({ cursor: pageParam, limit: LIST_PAGE_SIZE })
+            .then(okOrThrow),
+        initialPageParam: undefined as CreatedAtCursor | undefined,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
       }),
     listAll: () =>
       queryOptions({
@@ -26,7 +38,7 @@ export const service_example = {
           orpc.example.create.call(args).then(okOrThrow),
         onSuccess: async () => {
           await queryClient.invalidateQueries({
-            queryKey: service_example.queries.list().queryKey,
+            queryKey: orpc.example.listMine.key(),
           });
           await queryClient.invalidateQueries({
             queryKey: service_example.queries.listAll().queryKey,
@@ -40,7 +52,7 @@ export const service_example = {
           orpc.example.delete.call(args).then(okOrThrow),
         onSuccess: async () => {
           await queryClient.invalidateQueries({
-            queryKey: service_example.queries.list().queryKey,
+            queryKey: orpc.example.listMine.key(),
           });
           await queryClient.invalidateQueries({
             queryKey: service_example.queries.listAll().queryKey,
@@ -50,8 +62,8 @@ export const service_example = {
   },
 } as const;
 
-export const useExampleItemsQuery = () =>
-  useSessionQuery(service_example.queries.list());
+export const useExampleItemsInfiniteQuery = () =>
+  useSessionInfiniteQuery(service_example.queries.list());
 
 export const useExampleAdminItemsQuery = () =>
   useSessionQuery(service_example.queries.listAll());

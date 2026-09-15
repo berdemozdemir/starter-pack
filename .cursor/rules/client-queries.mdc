@@ -8,7 +8,8 @@ alwaysApply: false
 
 - Export a single `service_<domain>` object with `queries` and `mutations` keys
 - End with `as const`
-- Use `queryOptions()` / `mutationOptions()` from `@tanstack/react-query`
+- Use `queryOptions()` / `mutationOptions()` / `infiniteQueryOptions()` from `@tanstack/react-query`
+- Unbounded lists: `infiniteQueryOptions()` + `useSessionInfiniteQuery` with a `createdAt` + `id` cursor from `@/lib/db/created-at-cursor` — do not load the full table
 - Unwrap Results via `.then(okOrThrow)` from `@/lib/result`
 - Mutation args: `ArgsOf<typeof orpc.x.y.call>`
 - Query keys from orpc where possible
@@ -19,11 +20,14 @@ alwaysApply: false
 ## In components
 
 - Queries: `usePublicQuery` or `useSessionQuery` from `@/integrations/tanstack-query/query`
+- Infinite lists: `useSessionInfiniteQuery` — not raw `useInfiniteQuery` in components
 - Mutations: `useMutation(service_foo.mutations.create())`
-- No raw `useQuery` from `@tanstack/react-query` in components
+- No raw `useQuery` / `useInfiniteQuery` from `@tanstack/react-query` in components
 - No standalone key factories unless shared invalidation helpers need them
 - Reusable hooks exported separately if needed:
 
 ```typescript
-export const useGetItemsQuery = () => useSessionQuery(service_example.queries.list());
+export const useGetItemsQuery = () => useSessionQuery(service_example.queries.listAll());
+export const useListMineInfiniteQuery = () =>
+  useSessionInfiniteQuery(service_example.queries.list());
 ```

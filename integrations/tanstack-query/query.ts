@@ -1,11 +1,16 @@
 'use client';
 
-import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  QueryKey,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { cache } from 'react';
 import { createQueryClient } from './query-client';
 import { useAuthQuery } from '@/modules/auth/client-queries';
 
-// cached to create one client instance
 export const queryClient = cache(createQueryClient)();
 
 /** Sends request without requiring session */
@@ -34,6 +39,33 @@ export const useSessionQuery = <
   const authQuery = useAuthQuery();
 
   return useQuery({
+    ...options,
+    enabled:
+      !authQuery.isFetching &&
+      authQuery.data?.isLoggedIn &&
+      (options.enabled === undefined ? true : options.enabled),
+  });
+};
+
+/** only runs when user is logged in */
+export const useSessionInfiniteQuery = <
+  TQueryFnData = unknown,
+  TError = Error,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = readonly unknown[],
+  TPageParam = unknown,
+>(
+  options: UseInfiniteQueryOptions<
+    TQueryFnData,
+    TError,
+    TData,
+    TQueryKey,
+    TPageParam
+  >,
+) => {
+  const authQuery = useAuthQuery();
+
+  return useInfiniteQuery({
     ...options,
     enabled:
       !authQuery.isFetching &&

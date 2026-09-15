@@ -16,7 +16,7 @@ Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summ
 - Request edge in `proxy.ts` (Supabase session refresh + guest/protected redirects)
 - oRPC API layer (`/api/rpc`) with `procedure_public` / `procedure_protected` / `procedure_admin`
 - Drizzle + Postgres (local Supabase) + migration scripts
-- TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery`
+- TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery`
 - Demo domain: `modules/example` (owner-scoped items CRUD) — delete after your first real domain
 
 ## Project layout
@@ -48,8 +48,8 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 ### Client queries (`modules/*/client-queries.ts`)
 
 - Single `service_<domain>` object with `queries` and `mutations`
-- `queryOptions()` / `mutationOptions()` + `okOrThrow`
-- Components use `usePublicQuery` or `useSessionQuery` — not raw `useQuery`
+- `queryOptions()` / `mutationOptions()` / `infiniteQueryOptions()` + `okOrThrow`
+- Components use `usePublicQuery` or `useSessionQuery` — not raw `useQuery`. Unbounded lists use `useSessionInfiniteQuery` with a `createdAt` + `id` cursor (`@/lib/db/created-at-cursor`) — not raw `useInfiniteQuery`
 - Prefer invalidating via `onSuccess` + `queryClient.invalidateQueries` (or `meta.invalidates`)
 - Component hook order: local state / forms → queries → mutations → handlers
 - Do not destructure query `.data` into locals — use `query.data.field` in JSX

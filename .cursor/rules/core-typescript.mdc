@@ -122,7 +122,7 @@ CREATE POLICY → who (anon/authenticated) may read/write which rows
 In components, declare hooks in this order:
 
 1. Local state / form hooks (`useState`, `useForm`, …)
-2. Queries (`usePublicQuery` / `useSessionQuery`)
+2. Queries (`usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery`)
 3. Mutations (`useMutation`)
 4. Derived values and handlers
 
@@ -139,10 +139,14 @@ export function ExampleDashboard() {
 
 - Render order: `.data` first, then `.isError`, then loading as the final fallthrough — not `isSuccess`, and not error-before-data
 - Do not destructure query `.data` into locals (`const { items } = query.data`) — use `query.data.field` in JSX
-- Use `usePublicQuery` / `useSessionQuery` — not raw `useQuery`
+- Use `usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery` — not raw `useQuery` / `useInfiniteQuery`
+- Unbounded lists: `createdAt` + `id` cursor helpers in `@/lib/db/created-at-cursor`; flatten with `query.data.pages.flatMap((page) => page.items)`
 
 ```tsx
-if (itemsQuery.data) return <List items={itemsQuery.data.items} />;
+if (itemsQuery.data) {
+  const items = itemsQuery.data.pages.flatMap((page) => page.items);
+  return <List items={items} />;
+}
 
 if (itemsQuery.isError) return <p>Could not load items</p>;
 

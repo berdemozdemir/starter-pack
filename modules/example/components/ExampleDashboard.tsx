@@ -8,13 +8,17 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { paths } from '@/lib/paths';
 import { useAuthQuery } from '@/modules/auth/client-queries';
 import { UserRoles } from '@/modules/auth/types/user-role';
-import { useExampleItemsQuery, service_example } from '../client-queries';
+import {
+  useExampleItemsInfiniteQuery,
+  service_example,
+} from '../client-queries';
 import { CreateItemForm } from './CreateItemForm';
 import { EmptyState } from './EmptyState';
+import { InfiniteScrollSentinel } from '@/components/ui/InfiniteScrollSentinel';
 
 export function ExampleDashboard() {
   const authQuery = useAuthQuery();
-  const itemsQuery = useExampleItemsQuery();
+  const itemsQuery = useExampleItemsInfiniteQuery();
   const deleteMutation = useMutation(service_example.mutations.delete());
 
   const removeItem = async (id: string) => {
@@ -23,7 +27,8 @@ export function ExampleDashboard() {
   };
 
   if (itemsQuery.data) {
-    const hasItems = itemsQuery.data.items.length > 0;
+    const items = itemsQuery.data.pages.flatMap((page) => page.items);
+    const hasItems = items.length > 0;
     const isAdmin =
       authQuery.data?.isLoggedIn &&
       authQuery.data.user.role === UserRoles.Admin;
@@ -56,33 +61,40 @@ export function ExampleDashboard() {
         {!hasItems && <EmptyState />}
 
         {hasItems && (
-          <ul className="space-y-3">
-            {itemsQuery.data.items.map((item) => (
-              <li
-                key={item.id}
-                className="border-border/60 bg-card flex items-start justify-between gap-4 rounded-xl border p-4"
-              >
-                <div className="min-w-0">
-                  <p className="truncate font-medium">{item.title}</p>
-                  {item.notes && (
-                    <p className="text-muted-foreground mt-1 text-sm">
-                      {item.notes}
-                    </p>
-                  )}
-                </div>
-
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  disabled={deleteMutation.isPending}
-                  onClick={() => void removeItem(item.id)}
+          <>
+            <ul className="space-y-3">
+              {items.map((item) => (
+                <li
+                  key={item.id}
+                  className="border-border/60 bg-card flex items-start justify-between gap-4 rounded-xl border p-4"
                 >
-                  Delete
-                </Button>
-              </li>
-            ))}
-          </ul>
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{item.title}</p>
+                    {item.notes && (
+                      <p className="text-muted-foreground mt-1 text-sm">
+                        {item.notes}
+                      </p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    disabled={deleteMutation.isPending}
+                    onClick={() => void removeItem(item.id)}
+                  >
+                    Delete
+                  </Button>
+                </li>
+              ))}
+            </ul>
+            <InfiniteScrollSentinel
+              hasNextPage={itemsQuery.hasNextPage}
+              isFetchingNextPage={itemsQuery.isFetchingNextPage}
+              fetchNextPage={itemsQuery.fetchNextPage}
+            />
+          </>
         )}
       </div>
     );

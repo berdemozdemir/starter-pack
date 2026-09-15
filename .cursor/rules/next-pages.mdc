@@ -48,9 +48,12 @@ export default function DashboardPage() {
 ```tsx
 // modules/example/components/ExampleDashboard.tsx
 export function ExampleDashboard() {
-  const itemsQuery = useSessionQuery(service_example.queries.list());
+  const itemsQuery = useSessionInfiniteQuery(service_example.queries.list());
 
-  if (itemsQuery.data) return (/* render */);
+  if (itemsQuery.data) {
+    const items = itemsQuery.data.pages.flatMap((page) => page.items);
+    return (/* render */);
+  }
   if (itemsQuery.isError) return (/* error */);
   return (/* skeleton */);
 }
