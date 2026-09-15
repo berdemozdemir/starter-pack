@@ -49,7 +49,7 @@ Full conventions live in `.cursor/rules/`. Key points:
 - oRPC handlers in `modules/*/actions/`, TanStack Query via `service_*` objects
 - User-facing strings in English by default
 - Minimal diffs — no drive-by refactors
-- Schema changes: `pnpm drizzle:generate` → commit migration files → test with `pnpm drizzle:migrate`
+- Schema changes: `pnpm drizzle:generate` → commit migration files → test with `pnpm drizzle:migrate`. Tables that spread `...timestamps` must also get `trg_set_updated_at` in that migration (see `.cursor/rules/core-typescript.mdc`)
 
 ## Environments
 

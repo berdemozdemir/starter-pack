@@ -98,9 +98,10 @@ export default function DashboardPage() {
 ### Database
 
 - Table vars: `table_*`, enums: `pgEnum_*`, timestamps: `...timestamps` from `@/lib/db/timestamps` (`createdAt`, `updatedAt`, `deletedAt`)
+- `updated_at` is set by DB trigger `trg_set_updated_at` → `public.set_updated_at()` on UPDATE. New tables with `...timestamps` must attach the same trigger in their migration
 - Soft delete: `notDeleted(table)` / `softDeleteNow()` from `@/lib/db/not-deleted`. Reads/updates always filter `notDeleted`; content deletes are `update().set(softDeleteNow())` — never `.delete()` except composite-PK junction tables
 - Unique slugs: partial unique index `WHERE deleted_at IS NULL` — do not use `.unique()` on the slug column
-- Schema changes: edit `db-tables.ts` → register in `integrations/drizzle/drizzle-schema.ts` → `pnpm drizzle:generate` → commit SQL → `pnpm drizzle:migrate`
+- Schema changes: edit `db-tables.ts` → register in `integrations/drizzle/drizzle-schema.ts` → `pnpm drizzle:generate` → append `trg_set_updated_at` if the table uses `...timestamps` → commit SQL → `pnpm drizzle:migrate`
 - App tables: auth via oRPC (no Postgres RLS required when querying with `DATABASE_URL`)
 - Supabase Storage is **optional**: add RLS under `integrations/supabase/policies/` only when you introduce buckets
 

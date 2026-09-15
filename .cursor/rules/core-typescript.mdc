@@ -61,6 +61,14 @@ alwaysApply: true
 ## Database (Drizzle)
 
 - All `pgTable` declarations use `...timestamps` from `@/lib/db/timestamps` (`createdAt`, `updatedAt`, `deletedAt`)
+- `updated_at` is maintained by DB trigger `trg_set_updated_at` → `public.set_updated_at()`. Do not rely on Drizzle `.$onUpdate`. New tables that spread `...timestamps` must attach the same trigger in their migration:
+
+  ```sql
+  CREATE TRIGGER trg_set_updated_at
+  BEFORE UPDATE ON public.<table>
+  FOR EACH ROW
+  EXECUTE FUNCTION public.set_updated_at();
+  ```
 - Soft delete is mandatory for content rows. Use helpers from `@/lib/db/not-deleted` — do not write `isNull(table.deletedAt)` or set `deletedAt` by hand:
   - Reads / updates / “does this row exist?”: `.where(and(..., notDeleted(table)))`
   - Joins to content tables: also `notDeleted(joinedTable)` so a soft-deleted parent cannot leak
