@@ -13,6 +13,7 @@ Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summ
 ## What this starter includes
 
 - Auth module (login, signup, session, password reset)
+- Request edge in `proxy.ts` (Supabase session refresh + guest/protected redirects)
 - oRPC API layer (`/api/rpc`) with `procedure_public` / `procedure_protected`
 - Drizzle + Postgres (local Supabase) + migration scripts
 - TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery`
@@ -30,6 +31,7 @@ modules/<domain>/       # Feature modules
   db-tables.ts          # Drizzle pgTable definitions
 integrations/           # orpc, supabase, drizzle, tanstack-query wiring
 lib/                    # Shared utilities (result, paths, db helpers)
+proxy.ts                # Request edge: Supabase session refresh + auth redirects
 database/migrations/    # Drizzle SQL migrations (auto-generated)
 ```
 

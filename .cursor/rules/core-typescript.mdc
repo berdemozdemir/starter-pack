@@ -62,7 +62,7 @@ alwaysApply: true
 
 - All `pgTable` declarations use `...timestamps` from `@/lib/db/timestamps`
 - Naming: `table_*`, `query_*`, `view_*`, `pgEnum_*`
-- SQL table names: existing tables use plural (`events`, `users`); keep consistency within the project
+- SQL table names: existing tables use plural (`users`, `items`); keep consistency within the project
 - Zod schemas: `*Schema` suffix
 - No single-letter SQL aliases
 
@@ -70,7 +70,7 @@ alwaysApply: true
 
 This project uses **two separate layers**:
 
-1. **App tables** (`events`, `users`, etc.) — accessed only via oRPC + Drizzle with `DATABASE_URL` on the server. Auth/authorization lives in `procedure_protected` handlers, not Postgres RLS. Table RLS is **not required** today.
+1. **App tables** (`users`, `items`, etc.) — accessed only via oRPC + Drizzle with `DATABASE_URL` on the server. Auth/authorization lives in `procedure_protected` handlers, not Postgres RLS. Table RLS is **not required** today.
 2. **Supabase Storage** — clients upload directly, so RLS policies on `storage.objects` are defined in `integrations/supabase/policies/*.sql`.
 
 `.enableRLS()` in Drizzle only runs `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` — it **turns on** the RLS switch for a table. It does **not** create policies. Policies (`CREATE POLICY ...`) are separate SQL that define who can read/write rows.
