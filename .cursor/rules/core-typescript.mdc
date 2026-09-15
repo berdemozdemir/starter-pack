@@ -112,6 +112,7 @@ CREATE POLICY → who (anon/authenticated) may read/write which rows
 - Every page is locale-prefixed under `app/[language]/` (`/en/...`, `/tr/...`). Only `app/api` (and static files) stay unprefixed
 - Links and redirects use unprefixed `paths.*`. `proxy.ts` adds `/en` or `/tr`
 - After changing copy: `pnpm i18n:extract`, fill `locales/tr.po`, `pnpm i18n:compile`
+- Language switcher + theme switcher (light / dark / system) live in `app/[language]/layout.tsx`
 - oRPC `message` fields: user-friendly English (server Result payloads are not Lingui catalogs)
 
 ## Forms (create / update)

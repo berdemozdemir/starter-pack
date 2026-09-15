@@ -21,9 +21,37 @@ msgstr "Change language"
 msgid "Light"
 msgstr "Light"
 
-#: modules/landing/components/Page.tsx:42
+#: app/[language]/(public)/page.tsx:10
+msgid "A clone-and-ship Next.js foundation with auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions."
+msgstr "A clone-and-ship Next.js foundation with auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions."
+
+#: modules/landing/components/Page.tsx:98
+msgid "Typed procedures instead of Next.js server actions. Handlers return ok / err — they do not throw."
+msgstr "Typed procedures instead of Next.js server actions. Handlers return ok / err — they do not throw."
+
+#: modules/landing/components/Page.tsx:49
 msgid "Dashboard"
 msgstr "Dashboard"
+
+#: modules/landing/components/Page.tsx:107
+msgid "Local Supabase, timestamps, soft delete, RLS lockdown on app tables. Auth stays in oRPC, not table policies."
+msgstr "Local Supabase, timestamps, soft delete, RLS lockdown on app tables. Auth stays in oRPC, not table policies."
+
+#: modules/landing/components/Page.tsx:116
+msgid "service_* objects with usePublicQuery / useSessionQuery. Unbounded lists use useSessionInfiniteQuery and a createdAt + id cursor — see the example dashboard."
+msgstr "service_* objects with usePublicQuery / useSessionQuery. Unbounded lists use useSessionInfiniteQuery and a createdAt + id cursor — see the example dashboard."
+
+#: modules/landing/components/Page.tsx:79
+msgid "Login, signup, password reset, member/admin roles. Layouts call requireAuth / requireAdmin; oRPC procedures gate the API."
+msgstr "Login, signup, password reset, member/admin roles. Layouts call requireAuth / requireAdmin; oRPC procedures gate the API."
+
+#: modules/landing/components/Page.tsx:150
+msgid "Delete the demo domain"
+msgstr "Delete the demo domain"
+
+#: modules/landing/components/Page.tsx:86
+msgid "Locale-prefixed app"
+msgstr "Locale-prefixed app"
 
 #: modules/example/components/ExampleDashboard.tsx:93
 msgid "Delete"
@@ -33,13 +61,25 @@ msgstr "Delete"
 msgid "System"
 msgstr "System"
 
-#: modules/landing/components/Page.tsx:36
+#: modules/landing/components/Page.tsx:124
+msgid "Lingui"
+msgstr "Lingui"
+
+#: modules/landing/components/Page.tsx:137
+msgid "Where conventions live"
+msgstr "Where conventions live"
+
+#: modules/landing/components/Page.tsx:44
 msgid "Sign up"
 msgstr "Sign up"
 
-#: modules/landing/components/Page.tsx:13
-msgid "Next.js starter"
-msgstr "Next.js starter"
+#: modules/landing/components/Page.tsx:153
+msgid "<0>modules/example</0> is owner-scoped CRUD plus an admin list-all. It exists so you can read a complete slice (actions, infinite query, UI). Replace it with your first real domain."
+msgstr "<0>modules/example</0> is owner-scoped CRUD plus an admin list-all. It exists so you can read a complete slice (actions, infinite query, UI). Replace it with your first real domain."
+
+#: modules/landing/components/Page.tsx:30
+msgid "A clone-and-ship Next.js foundation: auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions. Read README.md to run it; keep AGENTS.md open while an agent writes features."
+msgstr "A clone-and-ship Next.js foundation: auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions. Read README.md to run it; keep AGENTS.md open while an agent writes features."
 
 #: modules/example/components/ExampleDashboard.tsx:28
 msgid "Item deleted"
@@ -49,17 +89,21 @@ msgstr "Item deleted"
 msgid "Could not load items. Make sure you are signed in and migrations have been applied."
 msgstr "Could not load items. Make sure you are signed in and migrations have been applied."
 
+#: modules/landing/components/Page.tsx:140
+msgid "Humans clone from README.md (setup, how-tos, bootstrap prompt). Agents follow AGENTS.md and .cursor/rules/ while writing code. Do not merge those files — keep them consistent."
+msgstr "Humans clone from README.md (setup, how-tos, bootstrap prompt). Agents follow AGENTS.md and .cursor/rules/ while writing code. Do not merge those files — keep them consistent."
+
+#: modules/landing/components/Page.tsx:77
+msgid "Auth"
+msgstr "Auth"
+
+#: modules/landing/components/Page.tsx:105
+msgid "Drizzle + Postgres"
+msgstr "Drizzle + Postgres"
+
 #: modules/example/components/ExampleDashboard.tsx:45
 msgid "My items"
 msgstr "My items"
-
-#: app/[language]/(public)/page.tsx:10
-msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
-msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo."
-
-#: modules/landing/components/Page.tsx:17
-msgid "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
-msgstr "Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able <0>modules/example</0> CRUD demo."
 
 #: modules/example/components/ExampleDashboard.tsx:59
 msgid "View all items (admin)"
@@ -69,18 +113,46 @@ msgstr "View all items (admin)"
 msgid "Starter pack · example module"
 msgstr "Starter pack · example module"
 
+#: modules/landing/components/Page.tsx:126
+msgid "English source strings in code, Turkish in locales/tr.po. After copy changes: extract, translate, compile."
+msgstr "English source strings in code, Turkish in locales/tr.po. After copy changes: extract, translate, compile."
+
+#: modules/landing/components/Page.tsx:114
+msgid "TanStack Query"
+msgstr "TanStack Query"
+
+#: modules/landing/components/Page.tsx:57
+msgid "Stack"
+msgstr "Stack"
+
 #: components/ThemeSwitcher.tsx:51
 msgid "Dark"
 msgstr "Dark"
 
-#: modules/landing/components/Page.tsx:30
+#: modules/landing/components/Page.tsx:39
 msgid "Log in"
 msgstr "Log in"
+
+#: modules/landing/components/Page.tsx:73
+msgid "What ships"
+msgstr "What ships"
 
 #: components/ThemeSwitcher.tsx:31
 #: components/ThemeSwitcher.tsx:32
 msgid "Change theme"
 msgstr "Change theme"
+
+#: modules/landing/components/Page.tsx:96
+msgid "oRPC + Result"
+msgstr "oRPC + Result"
+
+#: modules/landing/components/Page.tsx:26
+msgid "Starter pack, not a product"
+msgstr "Starter pack, not a product"
+
+#: modules/landing/components/Page.tsx:88
+msgid "Pages live under /en and /tr. Links use unprefixed paths; proxy.ts adds the locale. Language and theme switchers sit in the header."
+msgstr "Pages live under /en and /tr. Links use unprefixed paths; proxy.ts adds the locale. Language and theme switchers sit in the header."
 
 #: modules/example/components/ExampleDashboard.tsx:48
 msgid "This page shows the <0>modules/example</0> pattern: protected oRPC, TanStack Query, owner-scoped CRUD."

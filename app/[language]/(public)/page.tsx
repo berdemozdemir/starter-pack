@@ -7,7 +7,7 @@ export async function generateMetadata() {
 
   return {
     description: i18n._(
-      msg`Auth, oRPC, Drizzle, Supabase, and TanStack Query conventions — plus a delete-able modules/example CRUD demo.`,
+      msg`A clone-and-ship Next.js foundation with auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions.`,
     ),
   };
 }

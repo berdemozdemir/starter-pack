@@ -48,6 +48,7 @@ Full conventions live in `.cursor/rules/`. Key points:
 
 - oRPC handlers in `modules/*/actions/`, TanStack Query via `service_*` objects
 - Public copy: English source + Lingui; `pnpm i18n:extract` then fill `locales/tr.po`
+- How each system works (i18n, infinite query, auth): `README.md`
 - `LinguiClientProvider` stays in `components/providers` (app-wide)
 - App pages live under `app/[language]/`; links use unprefixed `paths.*` (middleware adds the locale)
 - Minimal diffs — no drive-by refactors

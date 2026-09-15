@@ -13,7 +13,8 @@ export const metadata: Metadata = {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
-  description: 'Next.js app starter with auth, oRPC, Drizzle, and Supabase.',
+  description:
+    'A clone-and-ship Next.js foundation with auth, locale-prefixed routes, oRPC, Drizzle, and TanStack Query conventions.',
 };
 
 export default async function RootLayout({

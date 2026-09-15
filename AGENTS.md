@@ -18,6 +18,7 @@ Coding conventions live in `.cursor/rules/` (auto-loaded by Cursor) and are summ
 - Drizzle + Postgres (local Supabase) + migration scripts
 - TanStack Query via `service_*` objects and `usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery`
 - Lingui i18n on every page (`app/[language]/`, catalogs in `locales/`)
+- Theme switcher (`next-themes`, light / dark / system) next to the language switcher
 - Demo domain: `modules/example` (owner-scoped items CRUD) — delete after your first real domain
 
 ## Project layout
@@ -115,6 +116,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - After changing copy: `pnpm i18n:extract` → fill `locales/tr.po` → `pnpm i18n:compile`
 - Language switcher: `@/lib/i18n/components/LanguageSwitcher` in `app/[language]/layout.tsx`
 - Theme switcher: `@/components/ThemeSwitcher` next to the language switcher (`next-themes`, light / dark / system)
+- How-tos (i18n steps, infinite query, auth layers): **README.md** — this file only states the rules
 
 ## Commands
 
@@ -167,7 +169,7 @@ CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`, `i18n` 
 | Module    | Purpose                                                                           |
 | --------- | --------------------------------------------------------------------------------- |
 | `auth`    | Login, signup, password reset, session, roles (`member` / `admin`)                |
-| `landing` | Public home under `app/[language]/(public)/` |
+| `landing` | Public home under `app/[language]/(public)/`                                      |
 | `example` | Teachable owner-scoped CRUD + admin list-all — **delete after first real domain** |
 
 Add your product domains to this table as you build them.
