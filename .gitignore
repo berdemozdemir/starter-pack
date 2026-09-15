@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.*
+.pnpm-store/
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -47,6 +48,3 @@ continue.md
 .todo.md
 todo.md
 env-variables.md
-
-solution-test.js
-solution.js
