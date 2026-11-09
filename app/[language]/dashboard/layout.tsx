@@ -8,5 +8,6 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout(props: PropsWithChildren) {
   await requireAuth();
-  return props.children;
+
+  return <main className="px-8 py-8">{props.children}</main>;
 }

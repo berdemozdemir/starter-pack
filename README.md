@@ -118,7 +118,7 @@ Login, signup, session, password reset, roles (`member` / `admin`).
 | `app/[language]/admin/layout.tsx`              | `requireAdmin()`                                                                       |
 | oRPC `procedure_protected` / `procedure_admin` | API gate                                                                               |
 
-`PageLayout` is width/padding, not an auth gate. Promote yourself with the SQL above, then sign in again.
+`PageLayout` is the content width. The route layout `main` owns padding. It is not an auth gate. Promote yourself with the SQL above, then sign in again.
 
 ### Locale-prefixed app (Lingui)
 

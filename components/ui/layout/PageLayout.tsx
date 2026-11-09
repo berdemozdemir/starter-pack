@@ -1,14 +1,14 @@
-import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { ComponentProps } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { cn } from '@/lib/utils';
 
-const pageLayoutVariants = cva('container pt-6 pb-24 w-full lg:px-5', {
+const pageLayoutVariants = cva('flex w-full flex-col gap-10', {
   variants: {
     variant: {
-      narrow: 'max-w-2xl',
-      standard: 'max-w-5xl',
+      narrow: 'max-w-xl',
+      standard: 'max-w-3xl',
       wide: 'max-w-7xl',
-      full: 'w-full max-w-full px-0',
+      full: 'w-full max-w-none',
     },
   },
   defaultVariants: {
@@ -16,27 +16,16 @@ const pageLayoutVariants = cva('container pt-6 pb-24 w-full lg:px-5', {
   },
 });
 
-export type PageLayoutProps = ComponentProps<'div'> &
+type PageLayoutProps = ComponentProps<'div'> &
   VariantProps<typeof pageLayoutVariants>;
 
-/**
- * Applies shared page width and vertical spacing.
- *
- * ```tsx
- * <PageLayout variant="standard">
- *   …
- * </PageLayout>
- * ```
- */
-export function PageLayout({
+export const PageLayout: FC<PageLayoutProps> = ({
   className,
   children,
   variant,
   ...props
-}: PageLayoutProps) {
-  return (
-    <div {...props} className={cn(pageLayoutVariants({ variant }), className)}>
-      {children}
-    </div>
-  );
-}
+}) => (
+  <div {...props} className={cn(pageLayoutVariants({ variant }), className)}>
+    {children}
+  </div>
+);

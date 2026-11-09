@@ -8,5 +8,6 @@ export const metadata: Metadata = {
 
 export default async function AdminLayout(props: PropsWithChildren) {
   await requireAdmin();
-  return props.children;
+
+  return <main className="px-8 py-8">{props.children}</main>;
 }

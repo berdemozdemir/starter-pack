@@ -65,7 +65,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - `app/**/page.tsx` = minimal wiring only
 - Logic and UI live in `modules/*/components/` (e.g. `Page`, `ExampleDashboard`)
 - Module page component is always named `Page` — the module path already scopes it
-- Protected UI: gate in the route **layout** — `requireAuth()` on `app/[language]/dashboard/layout.tsx`, `requireAdmin()` on `app/[language]/admin/layout.tsx`. `proxy.ts` is the first redirect; oRPC `procedure_*` is the API gate. `PageLayout` is chrome, not auth.
+- Protected UI: gate in the route **layout** — `requireAuth()` on `app/[language]/dashboard/layout.tsx`, `requireAdmin()` on `app/[language]/admin/layout.tsx`. `proxy.ts` is the first redirect; oRPC `procedure_*` is the API gate. `PageLayout` is the content width. The route layout `main` owns padding. It is chrome, not auth.
 
 ```tsx
 // app/[language]/dashboard/layout.tsx — requireAuth()
