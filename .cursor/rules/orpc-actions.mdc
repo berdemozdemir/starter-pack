@@ -10,6 +10,7 @@ alwaysApply: false
 - Export `orpc_doSomething` from kebab-case files without `orpc_` prefix (e.g. `create-item.ts`)
 - Handler logic **inline** in `.handler()` — never extract to a separate function
 - Use `tryCatch` / `tryCatchDb` + `ok` / `err` from `@/lib/result` — never throw (except DB transactions)
+- Annotate the value passed to `ok()` with its type. This is a variable annotation, not an `as` cast.
 - Error responses: `{ reason, message }` where `message` is user-friendly English
 
 ```typescript
@@ -18,7 +19,13 @@ const orpc_createItem = procedure_protected
   .handler(async ({ context, input }) => {
     const [err, data] = await tryCatchDb(() => { /* db logic */ });
     if (err) return err({ reason: 'database-error', message: 'Something went wrong' });
-    return ok({ data });
+
+    const response: Item[] = data.map((row) => ({
+      id: row.id,
+      name: row.name,
+    }));
+
+    return ok(response);
   });
 ```
 

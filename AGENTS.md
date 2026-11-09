@@ -47,6 +47,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - Export `orpc_doSomething` from kebab-case files (`do-something.ts`)
 - Handler logic **inline** inside `.handler()` — no separate handler functions
 - Use `tryCatch` / `tryCatchDb` + `ok` / `err` from `@/lib/result` — never throw (except in DB transactions)
+- Annotate the value passed to `ok()` with its type. This is a variable annotation, not an `as` cast.
 - Server-side calls: chain `.callable()` and invoke directly — no HTTP client
 - Auth: `procedure_public` (none) / `procedure_protected` (signed in) / `procedure_admin` (`admin` role)
 
