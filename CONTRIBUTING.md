@@ -5,7 +5,7 @@
 1. Create a branch (see naming below)
 2. Write code following project conventions (see `AGENTS.md` and `.cursor/rules/`)
 3. Open a PR targeting `develop`
-4. Ensure CI passes (`tests-ci`, `verify-migrations-integrity`, `i18n`)
+4. Ensure CI passes (`tests-ci`, `verify-migrations-integrity`, `i18n`, `validate-branch-and-commits`)
 5. Squash-merge after review
 
 ## Commit messages

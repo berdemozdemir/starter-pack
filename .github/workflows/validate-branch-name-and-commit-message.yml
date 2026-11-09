@@ -1,0 +1,53 @@
+name: Validate branch name and commit messages
+
+on:
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-branch-and-commits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Validate branch name
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|fix)/[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "::error::Branch name '$BRANCH_NAME' is invalid. Use feature/<kebab-case> or fix/<kebab-case>."
+            exit 1
+          fi
+
+      - name: Validate commit messages
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch origin "$BASE_REF"
+
+          COMMITS=$(git log "origin/${BASE_REF}..HEAD" --no-merges --pretty=format:%s)
+          if [[ -z "$COMMITS" ]]; then
+            exit 0
+          fi
+
+          INVALID=0
+
+          while IFS= read -r COMMIT_MSG; do
+            if [[ "$COMMIT_MSG" =~ ^(feat|fix|refactor|chore|docs|test):\ .+ ]]; then
+              echo "$COMMIT_MSG"
+            else
+              echo "::error::Invalid commit message: $COMMIT_MSG"
+              INVALID=1
+            fi
+          done <<< "$COMMITS"
+
+          if [[ "$INVALID" -eq 1 ]]; then
+            echo "::error::Commit messages must look like '<scope>: <message>'. Scopes: feat, fix, refactor, chore, docs, test."
+            exit 1
+          fi

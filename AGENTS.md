@@ -151,7 +151,7 @@ feature/* → PR → develop  → sandbox migration + deploy
 develop   → PR → main      → prod migration + deploy
 ```
 
-CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`, `i18n` (catalogs up to date).
+CI on PRs: `tests-ci` (typecheck + lint), `verify-migrations-integrity`, `i18n` (catalogs up to date), `validate-branch-and-commits` (branch name and commit messages on PRs into `develop`).
 
 ## New feature checklist
 
