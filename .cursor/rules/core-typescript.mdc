@@ -16,7 +16,9 @@ alwaysApply: true
 - File naming: hooks → camelCase, components → PascalCase, other → kebab-case
 - One param per function, or an object param
 - Prefer `args.field` over destructuring `args` in long functions (short functions excepted)
-- Prefer colocated code; no barrel `index.ts` re-exports
+- Prefer colocated code inside the module (`components/`, `utils/`); no barrel `index.ts` re-exports
+- A component file exports one component. The file name is that component (`ItemCard.tsx` exports `ItemCard`). Do not declare a second component in the same file.
+- Do not declare helper functions in a component file. Put them in `utils/` as kebab-case files.
 - No verbose JSDoc (@param, @returns, etc.)
 - No explicit return types on functions
 - No px values in custom CSS — use rem (Tailwind arbitrary values like `shadow-[0_8px_24px]` and canvas drawing are fine)
@@ -32,6 +34,14 @@ alwaysApply: true
   // Avoid
   {item.notes ? <p>{item.notes}</p> : null}
   {hasItems ? <ItemList items={items} /> : <EmptyState />}
+  ```
+- Quick return when the function body is only JSX. Drop the braces and the `return`. Keep braces when the body has any other statement
+  ```tsx
+  export const ItemCard: FC<ItemCardProps> = (props) => (
+    <article>
+      <p>{props.title}</p>
+    </article>
+  );
   ```
 - Omit curly braces when the body is a single statement — e.g. early `return`, single-line `if`, single-expression arrow functions:
   ```typescript
@@ -105,6 +115,17 @@ CREATE POLICY → who (anon/authenticated) may read/write which rows
 
 **Storage:** keep writing policies under `integrations/supabase/policies/` when adding buckets.
 
+## Typography
+
+- Reading text uses only `Heading1`, `Heading2`, `Heading3`, `Paragraph1`, and `Paragraph2` from `components/ui/typography`. The component owns the size. Weight, color, and tracking come from `className` at the call site. Do not export size class strings.
+- Small reading text is `Paragraph2`. Do not use `text-xs` or `text-sm` on reading text.
+- Buttons, badges, inputs, selects, menu items, and floating labels may stay small. They are not headings or paragraphs.
+- One `Heading1` per view. A primitive that already renders its own element, such as a dialog title, sets the size inline.
+
+## Color
+
+- Color comes from role tokens in `app/globals.css`: `background`, `foreground`, `primary`, `secondary`, `muted`, `success`, `error`, plus `hover`, `active`, and `-foreground` where a role needs them. Light values live on `:root`, dark values on `.dark`. Do not use Tailwind palette steps (`text-red-300`) or one-off color names. Opacity of a role (`bg-primary/10`) is fine.
+
 ## UI language / i18n
 
 - **Whole app:** Lingui (`@lingui/react/macro`, `@lingui/core/macro`). `LinguiClientProvider` lives in `components/providers` so `Trans` / `t` / `msg` work on every route
@@ -125,17 +146,31 @@ CREATE POLICY → who (anon/authenticated) may read/write which rows
 
 In components, declare hooks in this order:
 
-1. Local state / form hooks (`useState`, `useForm`, …)
+1. Local state (`useState`, …)
 2. Queries (`usePublicQuery` / `useSessionQuery` / `useSessionInfiniteQuery`)
 3. Mutations (`useMutation`)
-4. Derived values and handlers
+4. Form hooks (`useForm`)
+5. Derived values and handlers
+
+One blank line between these groups. No blank line between hooks of the same group.
 
 ```tsx
 export function ExampleDashboard() {
   const [filter, setFilter] = useState('all');
+  const [isOpen, setIsOpen] = useState(false);
+
   const itemsQuery = useListMineQuery();
+
   const deleteMutation = useMutation(service_example.mutations.delete());
-  // ...
+  const updateMutation = useMutation(service_example.mutations.update());
+
+  const form = useForm<ExampleRequest>({
+    defaultValues: { name: '' },
+  });
+
+  const submit = form.handleSubmit(() => {
+    // ...
+  });
 }
 ```
 

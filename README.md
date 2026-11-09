@@ -275,7 +275,7 @@ You are working in this Next.js **starter pack** folder (not a finished product)
 - Follow `AGENTS.md` and `.cursor/rules/`. Do not invent a second architecture.
 - Do not break: oRPC, Result pattern, `service_*`, thin `app/**/page.tsx`, named exports
 - Update `AGENTS.md` + `.cursor/rules/` for the new product name; keep conventions
-- JSX: `condition && <Node />` — never `condition ? <Node /> : null`
+- JSX: `condition && <Node />` — never `condition ? <Node /> : null`. A component whose body is only JSX uses a quick return
 - Module UI lives under `modules/*/components/`; App Router files only wire those components
 - Links and redirects stay unprefixed `paths.*`; `proxy.ts` adds `/en` or `/tr`
 - `package.json` name = `project_slug`

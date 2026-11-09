@@ -57,7 +57,7 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - `queryOptions()` / `mutationOptions()` / `infiniteQueryOptions()` + `okOrThrow`
 - Components use `usePublicQuery` or `useSessionQuery` — not raw `useQuery`. Unbounded lists use `useSessionInfiniteQuery` with a `createdAt` + `id` cursor (`@/lib/db/created-at-cursor`) — not raw `useInfiniteQuery`
 - Prefer invalidating via `onSuccess` + `queryClient.invalidateQueries` (or `meta.invalidates`)
-- Component hook order: local state / forms → queries → mutations → handlers
+- Component hook order: local state → queries → mutations → forms → handlers. One blank line between these groups; none between hooks of the same group
 - Do not destructure query `.data` into locals — use `query.data.field` in JSX
 - Render: `.data` first, then `.isError`, then loading — not `isSuccess`
 
@@ -92,6 +92,16 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 }
 ```
 
+### Quick return
+
+When a component body is only JSX, return it directly. Keep braces when the body has any other statement.
+
+```tsx
+export const ItemCard: FC<ItemCardProps> = (props) => (
+  <article>{props.title}</article>
+);
+```
+
 ### Forms
 
 - Submit button bottom-right (`flex justify-end`)
@@ -107,6 +117,18 @@ database/migrations/    # Drizzle SQL migrations (auto-generated)
 - Schema changes: edit `db-tables.ts` → register in `integrations/drizzle/drizzle-schema.ts` → `pnpm drizzle:generate` → append `trg_set_updated_at` if the table uses `...timestamps` → commit SQL → `pnpm drizzle:migrate`
 - App tables: every `pgTable` uses `.enableRLS()` (lockdown for PostgREST/`anon`); auth stays in oRPC. Do **not** add table `CREATE POLICY` unless querying via Supabase client roles. `DATABASE_URL` bypasses RLS so the app is unaffected
 - Supabase Storage is **optional**: add RLS under `integrations/supabase/policies/` only when you introduce buckets
+
+### Typography
+
+- Reading text uses `Heading1` / `Heading2` / `Heading3` and `Paragraph1` / `Paragraph2` in `components/ui/typography`
+- The component owns size. Weight, color, and tracking are `className` at the call site. Do not export size class strings
+- Small reading text is `Paragraph2`. `text-xs` and `text-sm` stay on control chrome (button, badge, input, select, menu item, floating label)
+- One `Heading1` per view. Dialog titles set `text-xl` on the primitive
+
+### Color
+
+- Color comes from role tokens in `app/globals.css`: `background`, `foreground`, `primary`, `secondary`, `muted`, `success`, `error`, plus `hover`, `active`, and `-foreground` where a role needs them
+- Light values live on `:root`, dark values on `.dark`. Do not use Tailwind palette steps (`text-red-300`) or one-off color names. Opacity of a role (`bg-primary/10`) is fine
 
 ### UI language / i18n
 
@@ -185,6 +207,10 @@ Add your product domains to this table as you build them.
 - No destructuring `args` in long functions — use `args.field` directly
 - No `handle*` on your own functions (library APIs like `form.handleSubmit` are fine)
 - No `condition ? <Node /> : null` — use `condition && <Node />`
+- No braces around a component whose body is only JSX — quick return
+- No second component in a component file, and no helper functions there — one component per file, helpers in `utils/`
 - No destructuring query `.data` into locals — use `query.data.field`
 - No `.delete()` on content tables — use `softDeleteNow()`
 - No app-table `CREATE POLICY` unless you query via Supabase `anon`/`authenticated`
+- No `text-xs` or `text-sm` on reading text — use `Paragraph2`. No exported typography size class strings
+- No Tailwind palette steps (`text-red-300`) or one-off color names — use role tokens in `app/globals.css`
