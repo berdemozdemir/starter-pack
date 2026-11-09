@@ -11,6 +11,7 @@ import {
   type FieldValues,
 } from 'react-hook-form';
 import { Slot } from '@radix-ui/react-slot';
+import { Paragraph1, Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/Label';
 
@@ -125,10 +126,10 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField();
 
   return (
-    <p
+    <Paragraph2
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-muted-foreground', className)}
       {...props}
     />
   );
@@ -143,14 +144,14 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   }
 
   return (
-    <p
+    <Paragraph1
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-destructive text-sm', className)}
+      className={cn('text-destructive', className)}
       {...props}
     >
       {body}
-    </p>
+    </Paragraph1>
   );
 }
 

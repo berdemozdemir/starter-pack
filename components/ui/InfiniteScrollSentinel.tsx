@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { Paragraph2 } from '@/components/ui/typography/Paragraph';
 
 export function InfiniteScrollSentinel(props: {
   hasNextPage: boolean;
@@ -34,7 +35,7 @@ export function InfiniteScrollSentinel(props: {
   return (
     <div ref={sentinelRef} className="flex justify-center py-4">
       {props.isFetchingNextPage && (
-        <p className="text-muted-foreground text-sm">Loading more…</p>
+        <Paragraph2 className="text-muted-foreground">Loading more…</Paragraph2>
       )}
     </div>
   );

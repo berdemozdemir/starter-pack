@@ -5,6 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
+import { Heading3 } from '@/components/ui/typography/Heading';
+import { Paragraph2 } from '@/components/ui/typography/Paragraph';
 import {
   Form,
   FormControl,
@@ -50,10 +52,10 @@ export function CreateItemForm() {
         className="border-border/60 bg-card space-y-4 rounded-2xl border p-6"
       >
         <div>
-          <h2 className="text-base font-medium">New item</h2>
-          <p className="text-muted-foreground mt-1 text-sm">
+          <Heading3 className="font-semibold">New item</Heading3>
+          <Paragraph2 className="text-muted-foreground mt-1">
             Example form showing the oRPC + Zod + react-hook-form flow.
-          </p>
+          </Paragraph2>
         </div>
 
         <FormField

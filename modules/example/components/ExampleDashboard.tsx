@@ -5,6 +5,8 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
+import { Heading1 } from '@/components/ui/typography/Heading';
+import { Paragraph1, Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { paths } from '@/lib/paths';
 import { useAuthQuery } from '@/modules/auth/client-queries';
@@ -36,29 +38,29 @@ export function ExampleDashboard() {
       authQuery.data.user.role === UserRoles.Admin;
 
     return (
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
+      <div className="flex flex-col gap-8">
         <header className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          <Paragraph2 className="text-muted-foreground font-medium tracking-wide uppercase">
             <Trans>Starter pack · example module</Trans>
-          </p>
-          <h1 className="text-2xl font-semibold tracking-tight">
+          </Paragraph2>
+          <Heading1 className="font-semibold tracking-tight">
             <Trans>My items</Trans>
-          </h1>
-          <p className="text-muted-foreground text-sm">
+          </Heading1>
+          <Paragraph2 className="text-muted-foreground">
             <Trans>
               This page shows the <code>modules/example</code> pattern:
               protected oRPC, TanStack Query, owner-scoped CRUD.
             </Trans>
-          </p>
+          </Paragraph2>
           {isAdmin && (
-            <p>
+            <Paragraph2>
               <Link
                 href={paths.admin.base}
-                className="text-sm font-medium underline-offset-4 hover:underline"
+                className="font-medium underline-offset-4 hover:underline"
               >
                 <Trans>View all items (admin)</Trans>
               </Link>
-            </p>
+            </Paragraph2>
           )}
         </header>
 
@@ -75,11 +77,13 @@ export function ExampleDashboard() {
                   className="border-border/60 bg-card flex items-start justify-between gap-4 rounded-xl border p-4"
                 >
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{item.title}</p>
+                    <Paragraph1 className="truncate font-medium">
+                      {item.title}
+                    </Paragraph1>
                     {item.notes && (
-                      <p className="text-muted-foreground mt-1 text-sm">
+                      <Paragraph2 className="text-muted-foreground mt-1">
                         {item.notes}
-                      </p>
+                      </Paragraph2>
                     )}
                   </div>
 
@@ -108,18 +112,16 @@ export function ExampleDashboard() {
 
   if (itemsQuery.isError)
     return (
-      <div className="mx-auto max-w-2xl px-4 py-10">
-        <p className="text-destructive text-sm">
-          <Trans>
-            Could not load items. Make sure you are signed in and migrations
-            have been applied.
-          </Trans>
-        </p>
-      </div>
+      <Paragraph1 className="text-destructive">
+        <Trans>
+          Could not load items. Make sure you are signed in and migrations have
+          been applied.
+        </Trans>
+      </Paragraph1>
     );
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 px-4 py-10">
+    <div className="flex flex-col gap-4">
       <Skeleton className="h-8 w-48" />
       <Skeleton className="h-40 w-full" />
       <Skeleton className="h-24 w-full" />

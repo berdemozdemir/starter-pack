@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { PageLayout } from '@/components/ui/layout/PageLayout';
+import { Heading1 } from '@/components/ui/typography/Heading';
+import { Paragraph1, Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { paths } from '@/lib/paths';
 import { useExampleAdminItemsQuery } from '../client-queries';
@@ -21,29 +23,33 @@ function AdminItems() {
     const hasItems = itemsQuery.data.items.length > 0;
 
     return (
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
+      <div className="flex flex-col gap-8">
         <header className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          <Paragraph2 className="text-muted-foreground font-medium tracking-wide uppercase">
             Admin · all items
-          </p>
-          <h1 className="text-2xl font-semibold tracking-tight">All items</h1>
-          <p className="text-muted-foreground text-sm">
+          </Paragraph2>
+          <Heading1 className="font-semibold tracking-tight">
+            All items
+          </Heading1>
+          <Paragraph2 className="text-muted-foreground">
             This route is gated by <code>requireAdmin()</code> in{' '}
             <code>app/[language]/admin/layout.tsx</code> and loaded with{' '}
             <code>procedure_admin</code>. Members are redirected away.
-          </p>
-          <p>
+          </Paragraph2>
+          <Paragraph2>
             <Link
               href={paths.dashboard.base}
-              className="text-sm font-medium underline-offset-4 hover:underline"
+              className="font-medium underline-offset-4 hover:underline"
             >
               Back to my items
             </Link>
-          </p>
+          </Paragraph2>
         </header>
 
         {!hasItems && (
-          <p className="text-muted-foreground text-sm">No items yet.</p>
+          <Paragraph2 className="text-muted-foreground">
+            No items yet.
+          </Paragraph2>
         )}
 
         {hasItems && (
@@ -53,15 +59,17 @@ function AdminItems() {
                 key={item.id}
                 className="border-border/60 bg-card rounded-xl border p-4"
               >
-                <p className="truncate font-medium">{item.title}</p>
+                <Paragraph1 className="truncate font-medium">
+                  {item.title}
+                </Paragraph1>
                 {item.notes && (
-                  <p className="text-muted-foreground mt-1 text-sm">
+                  <Paragraph2 className="text-muted-foreground mt-1">
                     {item.notes}
-                  </p>
+                  </Paragraph2>
                 )}
-                <p className="text-muted-foreground mt-2 text-xs">
+                <Paragraph2 className="text-muted-foreground mt-2">
                   {item.ownerName} · {item.ownerEmail}
-                </p>
+                </Paragraph2>
               </li>
             ))}
           </ul>
@@ -72,13 +80,13 @@ function AdminItems() {
 
   if (itemsQuery.isError)
     return (
-      <div className="mx-auto max-w-2xl px-4 py-10">
-        <p className="text-destructive text-sm">Could not load items.</p>
-      </div>
+      <Paragraph1 className="text-destructive">
+        Could not load items.
+      </Paragraph1>
     );
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 px-4 py-10">
+    <div className="flex flex-col gap-4">
       <Skeleton className="h-8 w-48" />
       <Skeleton className="h-24 w-full" />
     </div>
