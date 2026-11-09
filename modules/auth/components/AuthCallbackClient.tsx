@@ -1,6 +1,7 @@
 'use client';
 
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { createSupabaseBrowserClient } from '@/integrations/supabase/supabase-client';
 import { paths } from '@/lib/paths';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -46,9 +47,11 @@ export const AuthCallbackClient = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-16">
-      <div className="text-cream/65 flex flex-col items-center gap-3 text-sm">
+      <div className="flex flex-col items-center gap-3">
         <LoadingSpinner />
-        <p>Verifying your session...</p>
+        <Paragraph2 className="text-muted-foreground">
+          Verifying your session...
+        </Paragraph2>
       </div>
     </div>
   );

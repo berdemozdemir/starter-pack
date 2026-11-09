@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/Form';
 import { paths } from '@/lib/paths';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { Paragraph1, Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { AuthFormShell } from './AuthFormShell';
 import { LabeledInput } from './LabeledInput';
 import { useMutation } from '@tanstack/react-query';
@@ -81,12 +82,14 @@ export const ResetPasswordForm = () => {
         subtitle="Your password reset link is expired or invalid. Please request a new one."
       >
         <div className="space-y-4 text-center">
-          <Link
-            className="text-gold hover:text-gold-light inline-block text-sm font-medium underline-offset-4 transition-colors hover:underline"
-            href={paths.auth.forgotPassword}
-          >
-            Request a new reset link
-          </Link>
+          <Paragraph2 className="text-center">
+            <Link
+              className="text-primary hover:text-primary-hover inline-block font-medium underline-offset-4 transition-colors hover:underline"
+              href={paths.auth.forgotPassword}
+            >
+              Request a new reset link
+            </Link>
+          </Paragraph2>
         </div>
       </AuthFormShell>
     );
@@ -137,7 +140,7 @@ export const ResetPasswordForm = () => {
 
           <Button
             disabled={updatePasswordMutation.isPending}
-            className="border-gold/50 bg-gold text-deep hover:bg-gold-light hover:text-deep mt-1 w-full py-5 text-sm font-semibold shadow-[0_8px_24px_-4px_rgba(212,175,55,0.35)] transition-[color,box-shadow,transform] hover:shadow-[0_10px_28px_-4px_rgba(212,175,55,0.45)] active:translate-y-px"
+            className="border-primary/50 bg-primary text-primary-foreground hover:bg-primary-hover mt-1 w-full py-5 text-sm font-semibold transition-[color,box-shadow,transform] active:translate-y-px"
             type="submit"
           >
             Update password{' '}
@@ -145,10 +148,12 @@ export const ResetPasswordForm = () => {
           </Button>
 
           {updatePasswordMutation.error && (
-            <div className="text-destructive border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center text-sm">
-              {toUserFacingSupabaseAuthMessage(
-                updatePasswordMutation.error.message,
-              )}
+            <div className="border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center">
+              <Paragraph1 className="text-destructive">
+                {toUserFacingSupabaseAuthMessage(
+                  updatePasswordMutation.error.message,
+                )}
+              </Paragraph1>
             </div>
           )}
         </form>

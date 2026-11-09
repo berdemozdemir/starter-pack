@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/Form';
 import { paths } from '@/lib/paths';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { Paragraph1 } from '@/components/ui/typography/Paragraph';
 import { AuthFormShell } from './AuthFormShell';
 import { LabeledInput } from './LabeledInput';
 import { useMutation } from '@tanstack/react-query';
@@ -119,26 +120,30 @@ export const SignUpForm = () => {
 
           <Button
             disabled={signupMutation.isPending}
-            className="border-gold/50 bg-gold text-deep hover:bg-gold-light hover:text-deep mt-1 w-full py-5 text-sm font-semibold shadow-[0_8px_24px_-4px_rgba(212,175,55,0.35)] transition-[color,box-shadow,transform] hover:shadow-[0_10px_28px_-4px_rgba(212,175,55,0.45)] active:translate-y-px"
+            className="border-primary/50 bg-primary text-primary-foreground hover:bg-primary-hover mt-1 w-full py-5 text-sm font-semibold transition-[color,box-shadow,transform] active:translate-y-px"
             type="submit"
           >
             Sign up {signupMutation.isPending && <LoadingSpinner />}
           </Button>
 
           {signupMutation.error && (
-            <div className="text-destructive border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center text-sm">
-              {toUserFacingSupabaseAuthMessage(signupMutation.error.message)}
+            <div className="border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center">
+              <Paragraph1 className="text-destructive">
+                {toUserFacingSupabaseAuthMessage(signupMutation.error.message)}
+              </Paragraph1>
             </div>
           )}
 
-          <div className="text-cream/55 border-t border-white/10 pt-5 text-center text-sm">
-            Already have an account?{' '}
-            <Link
-              className="text-gold hover:text-gold-light font-medium underline-offset-4 transition-colors hover:underline"
-              href={paths.auth.login}
-            >
-              Sign in
-            </Link>
+          <div className="border-foreground/10 border-t pt-5 text-center">
+            <Paragraph1 className="text-foreground/55">
+              Already have an account?{' '}
+              <Link
+                className="text-primary hover:text-primary-hover font-medium underline-offset-4 transition-colors hover:underline"
+                href={paths.auth.login}
+              >
+                Sign in
+              </Link>
+            </Paragraph1>
           </div>
         </form>
       </AuthFormShell>

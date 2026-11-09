@@ -1,6 +1,8 @@
 'use client';
 
 import { SiteMark } from '@/components/branding/SiteMark';
+import { Heading1 } from '@/components/ui/typography/Heading';
+import { Paragraph1 } from '@/components/ui/typography/Paragraph';
 import { SITE_NAME } from '@/lib/constants/site';
 import { paths } from '@/lib/paths';
 import { Sparkles } from 'lucide-react';
@@ -19,56 +21,56 @@ export const AuthFormShell = ({
   children,
 }: AuthFormShellProps) => {
   return (
-    <div className="animate-fade-in-up relative w-full max-w-88">
+    <div className="relative w-full max-w-88">
       <div
         aria-hidden
-        className="from-gold/25 to-rose/20 pointer-events-none absolute -inset-px rounded-[1.35rem] bg-linear-to-br via-transparent blur-xl"
+        className="from-primary/25 to-accent/20 pointer-events-none absolute -inset-px rounded-[1.35rem] bg-linear-to-br via-transparent blur-xl"
       />
 
-      <div className="from-deep-light/95 to-deep relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b shadow-[0_24px_48px_-12px_rgba(0,0,0,0.55)]">
+      <div className="from-card/95 to-background relative overflow-hidden rounded-2xl border border-foreground/10 bg-linear-to-b shadow-xl">
         <div
           aria-hidden
-          className="bg-gold/[0.07] pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full"
+          className="bg-primary/[0.07] pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full"
         />
         <div
           aria-hidden
-          className="bg-rose/10 pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full"
+          className="bg-accent/10 pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full"
         />
 
         <div className="relative px-8 pt-10 pb-8">
           <div className="relative mx-auto mb-7 flex w-fit flex-col items-center">
             <Sparkles
               aria-hidden
-              className="text-gold/45 absolute top-1 -left-7 size-5"
+              className="text-primary/45 absolute top-1 -left-7 size-5"
               strokeWidth={1.25}
             />
             <Sparkles
               aria-hidden
-              className="text-gold/45 absolute top-1 -right-7 size-5 scale-x-[-1]"
+              className="text-primary/45 absolute top-1 -right-7 size-5 scale-x-[-1]"
               strokeWidth={1.25}
             />
 
             <Link
               href={paths.home}
-              className="focus-visible:ring-gold/55 flex flex-col items-center rounded-lg focus-visible:ring-2 focus-visible:outline-none"
+              className="focus-visible:ring-primary/55 flex flex-col items-center rounded-lg focus-visible:ring-2 focus-visible:outline-none"
             >
-              <div className="from-gold/30 via-gold/10 ring-gold/35 ring-offset-deep-light flex h-17 w-17 items-center justify-center rounded-full bg-linear-to-br to-transparent ring-2 ring-offset-2">
+              <div className="from-primary/30 via-primary/10 ring-primary/35 ring-offset-card flex h-17 w-17 items-center justify-center rounded-full bg-linear-to-br to-transparent ring-2 ring-offset-2">
                 <SiteMark className="h-10 w-10" />
               </div>
 
-              <span className="font-display text-gold mt-4 text-center text-base font-semibold tracking-tight">
+              <Paragraph1 className="text-primary mt-4 text-center font-semibold tracking-tight">
                 {SITE_NAME}
-              </span>
+              </Paragraph1>
             </Link>
 
-            <h1 className="font-display text-cream mt-3 text-center text-2xl font-semibold tracking-tight">
+            <Heading1 className="mt-3 text-center font-semibold tracking-tight">
               {title}
-            </h1>
-            <p className="text-cream/65 mt-2 max-w-68 text-center text-sm leading-relaxed">
+            </Heading1>
+            <Paragraph1 className="text-foreground/65 mt-2 max-w-68 text-center leading-relaxed">
               {subtitle}
-            </p>
+            </Paragraph1>
 
-            <div aria-hidden className="section-divider mt-6 w-24 opacity-80" />
+            <div aria-hidden className="border-border mt-6 w-24 border-t" />
           </div>
 
           {children}

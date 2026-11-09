@@ -45,7 +45,7 @@ const StepperTrigger = React.forwardRef<
       'disabled:pointer-events-none disabled:opacity-50',
       'data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-background',
       isCompleted &&
-        'bg-success-bg text-success-fg hover:text-foreground border-none',
+        'bg-success/15 text-success hover:text-foreground border-none',
       className,
     )}
     {...props}
@@ -70,7 +70,7 @@ const StepperDotTrigger = React.forwardRef<
       'disabled:pointer-events-none disabled:opacity-50',
       'data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-background data-[state=active]:w-5',
       isCompleted &&
-        'text-success-fg hover:text-foreground border-none bg-green-500',
+        'text-success-foreground hover:text-foreground border-none bg-success',
       className,
     )}
     {...props}

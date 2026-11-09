@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/Form';
 import { paths } from '@/lib/paths';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { Paragraph1, Paragraph2 } from '@/components/ui/typography/Paragraph';
 import { AuthFormShell } from './AuthFormShell';
 import { LabeledInput } from './LabeledInput';
 import { useMutation } from '@tanstack/react-query';
@@ -61,16 +62,18 @@ export const ForgotPasswordForm = () => {
         subtitle="A password reset link was sent to your email. Check your inbox and spam folder."
       >
         <div className="space-y-4 text-center">
-          <p className="text-cream/65 text-sm leading-relaxed">
+          <Paragraph1 className="text-foreground/65 leading-relaxed">
             After you open the link, you can set a new password.
-          </p>
+          </Paragraph1>
 
-          <Link
-            className="text-gold hover:text-gold-light inline-block text-sm font-medium underline-offset-4 transition-colors hover:underline"
-            href={paths.auth.login}
-          >
-            Back to sign in
-          </Link>
+          <Paragraph2 className="text-center">
+            <Link
+              className="text-primary hover:text-primary-hover inline-block font-medium underline-offset-4 transition-colors hover:underline"
+              href={paths.auth.login}
+            >
+              Back to sign in
+            </Link>
+          </Paragraph2>
         </div>
       </AuthFormShell>
     );
@@ -99,7 +102,7 @@ export const ForgotPasswordForm = () => {
 
           <Button
             disabled={requestResetMutation.isPending}
-            className="border-gold/50 bg-gold text-deep hover:bg-gold-light hover:text-deep mt-1 w-full py-5 text-sm font-semibold shadow-[0_8px_24px_-4px_rgba(212,175,55,0.35)] transition-[color,box-shadow,transform] hover:shadow-[0_10px_28px_-4px_rgba(212,175,55,0.45)] active:translate-y-px"
+            className="border-primary/50 bg-primary text-primary-foreground hover:bg-primary-hover mt-1 w-full py-5 text-sm font-semibold transition-[color,box-shadow,transform] active:translate-y-px"
             type="submit"
           >
             Send reset link{' '}
@@ -107,21 +110,25 @@ export const ForgotPasswordForm = () => {
           </Button>
 
           {requestResetMutation.error && (
-            <div className="text-destructive border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center text-sm">
-              {toUserFacingSupabaseAuthMessage(
-                requestResetMutation.error.message,
-              )}
+            <div className="border-destructive/25 bg-destructive/10 rounded-lg border px-3 py-2 text-center">
+              <Paragraph1 className="text-destructive">
+                {toUserFacingSupabaseAuthMessage(
+                  requestResetMutation.error.message,
+                )}
+              </Paragraph1>
             </div>
           )}
 
-          <div className="text-cream/55 border-t border-white/10 pt-5 text-center text-sm">
-            Remember your password?{' '}
-            <Link
-              className="text-gold hover:text-gold-light font-medium underline-offset-4 transition-colors hover:underline"
-              href={paths.auth.login}
-            >
-              Sign in
-            </Link>
+          <div className="border-foreground/10 border-t pt-5 text-center">
+            <Paragraph1 className="text-foreground/55">
+              Remember your password?{' '}
+              <Link
+                className="text-primary hover:text-primary-hover font-medium underline-offset-4 transition-colors hover:underline"
+                href={paths.auth.login}
+              >
+                Sign in
+              </Link>
+            </Paragraph1>
           </div>
         </form>
       </AuthFormShell>

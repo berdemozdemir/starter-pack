@@ -51,7 +51,7 @@ export function LanguageSwitcher(props: LanguageSwitcherProps) {
           className={cn(
             'inline-flex cursor-pointer items-center gap-2 rounded-lg text-sm font-medium transition-colors',
             variant === 'onPrimary'
-              ? 'text-primary-foreground h-8 gap-1.5 rounded-md px-2 py-1 text-[0.8125rem] opacity-90 hover:bg-white/10 hover:opacity-100 md:h-auto md:px-2.5'
+              ? 'text-primary-foreground h-8 gap-1.5 rounded-md px-2 py-1 text-[0.8125rem] opacity-90 hover:bg-foreground/10 hover:opacity-100 md:h-auto md:px-2.5'
               : 'border-border bg-background text-foreground hover:bg-muted h-9 border px-3 py-2',
           )}
         >
